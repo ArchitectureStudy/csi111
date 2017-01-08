@@ -31,4 +31,10 @@ public class GithubUser {
     public void setRepository(String repository) {
         this.repository = repository;
     }
+
+
+    public boolean validateGitData(){
+        return user != null && user.length() > 0 && repository != null && repository.length() > 0;
+    }
+
 }

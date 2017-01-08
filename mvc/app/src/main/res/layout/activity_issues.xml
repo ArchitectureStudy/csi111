@@ -10,10 +10,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.sean.android.mvcsample.issues.IssuesActivity">
 
+    <EditText
+        android:id="@+id/editText_github_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
+        android:hint="@string/input_github_id"/>
+
+    <EditText
+        android:id="@+id/editText_github_repo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText_github_id"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
+        android:hint="@string/input_github_repository"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_issues"
         android:layout_width="match_parent"
+        android:layout_below="@id/editText_github_repo"
         android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

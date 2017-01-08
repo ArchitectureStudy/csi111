@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">mvc</string>
+    <string name="app_name">mvcSample</string>
+    <string name="input_github_id">Enter Github Id</string>
+    <string name="input_github_repository">Enter Github Repository</string>
+    <string name="menu_title_inqueryIssues">Inquery Issues</string>
+
 </resources>

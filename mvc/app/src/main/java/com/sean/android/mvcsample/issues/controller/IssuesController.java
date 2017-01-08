@@ -18,6 +18,8 @@ import java.util.List;
  */
 
 public class IssuesController implements ServiceWorker.ServiceWorkEventListener{
+    private static final String TAG = IssuesController.class.getName();
+
     private GithubUser githubUser;
     private GetIssuesFromGithubServiceWorker getIssuesFromGithubServiceWorker;
 
@@ -37,8 +39,8 @@ public class IssuesController implements ServiceWorker.ServiceWorkEventListener{
 
     }
 
-    public void executeIssuesService() {
-        if(getIssuesFromGithubServiceWorker != null) {
+    private void executeIssuesService() {
+        if(getIssuesFromGithubServiceWorker != null && githubUser.validateGitData()) {
             getIssuesFromGithubServiceWorker.executeAsync();
         }
     }
@@ -69,6 +71,7 @@ public class IssuesController implements ServiceWorker.ServiceWorkEventListener{
 
     @Override
     public void onFail(Throwable e) {
+        Log.d(TAG, "onFail\n[" + e.getMessage() + "]");
         issueControllerStateListener.updateModelFailed();
     }
 
@@ -78,5 +81,17 @@ public class IssuesController implements ServiceWorker.ServiceWorkEventListener{
 
     public void setModelStateListener(ModelStateListener modelStateListener) {
         this.modelStateListener = modelStateListener;
+    }
+
+    public void eventActionInqueryIssues(String githubId, String githubRepo) {
+        if(githubUser == null) {
+            githubUser = new GithubUser(githubId, githubRepo);
+        }
+        else {
+            githubUser.setUser(githubId);
+            githubUser.setRepository(githubRepo);
+        }
+
+        executeIssuesService();
     }
 }

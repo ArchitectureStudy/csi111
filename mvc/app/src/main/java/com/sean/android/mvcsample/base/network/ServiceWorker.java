@@ -28,15 +28,24 @@ public abstract class ServiceWorker<T> implements Callback<T> {
     }
 
     public void executeAsync() {
+        if(serviceWorkEventListener != null) {
+            serviceWorkEventListener.onPreExecute();
+        }
+
         if(serviceCall == null) {
             this.serviceCall = createService();
         }
+
         if (serviceCall != null && !serviceCall.isExecuted()) {
             serviceCall.enqueue(this);
         }
     }
 
     public Response<T> execute() throws IOException {
+        if(serviceWorkEventListener != null) {
+            serviceWorkEventListener.onPreExecute();
+        }
+
         if(serviceCall == null) {
             this.serviceCall = createService();
         }
