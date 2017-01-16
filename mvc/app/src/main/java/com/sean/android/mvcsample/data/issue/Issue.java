@@ -1,7 +1,7 @@
-package com.sean.android.mvcsample.issues.model;
+package com.sean.android.mvcsample.data.issue;
 
 import com.sean.android.mvcsample.base.model.Model;
-import com.sean.android.mvcsample.issues.model.dto.IssueDTO;
+import com.sean.android.mvcsample.data.dto.IssueDTO;
 
 /**
  * Created by sean on 2017. 1. 7..

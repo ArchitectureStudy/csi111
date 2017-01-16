@@ -1,4 +1,4 @@
-package com.sean.android.mvcsample.issues.adapter;
+package com.sean.android.mvcsample.issues;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sean.android.mvcsample.R;
-import com.sean.android.mvcsample.issues.model.Issues;
+import com.sean.android.mvcsample.data.issue.Issue;
+
+import java.util.List;
+
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
  * Created by sean on 2017. 1. 7..
@@ -15,10 +19,12 @@ import com.sean.android.mvcsample.issues.model.Issues;
 
 public class IssuesAdapter extends RecyclerView.Adapter<IssuesAdapter.IssuesViewHolder> {
 
-    private Issues issues;
+    private List<Issue> mIssues;
+    private IssueItemListener mIssueItemListener;
 
-    public IssuesAdapter(Issues issues) {
-        this.issues = issues;
+    public IssuesAdapter(List<Issue> issues, IssueItemListener issueItemListener) {
+        setList(issues);
+        mIssueItemListener = issueItemListener;
     }
 
     @Override
@@ -30,19 +36,24 @@ public class IssuesAdapter extends RecyclerView.Adapter<IssuesAdapter.IssuesView
 
     @Override
     public void onBindViewHolder(IssuesViewHolder holder, int position) {
-        holder.titleTextView.setText(issues.get(position).getTitle());
-        holder.idTextView.setText("#" + issues.get(position).getId());
+        holder.titleTextView.setText(mIssues.get(position).getTitle());
+        holder.idTextView.setText("#" + mIssues.get(position).getId());
     }
 
     @Override
     public int getItemCount() {
-        return issues.count();
+        return mIssues.size();
     }
 
-    public void setIssues(Issues issues) {
-        this.issues = issues;
+    private void setList(List<Issue> issues) {
+        this.mIssues = checkNotNull(issues);
+    }
+
+    public void replaceData(List<Issue> issues) {
+        setList(issues);
         notifyDataSetChanged();
     }
+
 
     static class IssuesViewHolder extends RecyclerView.ViewHolder {
         public TextView titleTextView;
@@ -55,5 +66,9 @@ public class IssuesAdapter extends RecyclerView.Adapter<IssuesAdapter.IssuesView
             idTextView = (TextView) itemView.findViewById(R.id.id_textView);
             titleTextView = (TextView) itemView.findViewById(R.id.title_textView);
         }
+    }
+
+    public interface IssueItemListener {
+        void onIssueClick(Issue clickedIssue);
     }
 }

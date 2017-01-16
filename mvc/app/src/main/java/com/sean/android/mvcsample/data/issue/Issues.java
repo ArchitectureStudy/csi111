@@ -1,4 +1,4 @@
-package com.sean.android.mvcsample.issues.model;
+package com.sean.android.mvcsample.data.issue;
 
 import com.sean.android.mvcsample.base.model.ModelContainer;
 

@@ -1,4 +1,4 @@
-package com.sean.android.mvcsample.issues.model;
+package com.sean.android.mvcsample.data.issue;
 
 /**
  * Created by sean on 2017. 1. 7..

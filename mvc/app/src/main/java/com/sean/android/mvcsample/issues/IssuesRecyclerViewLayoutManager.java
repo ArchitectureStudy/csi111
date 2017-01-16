@@ -1,9 +1,8 @@
-package com.sean.android.mvcsample.issues.adapter;
+package com.sean.android.mvcsample.issues;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 
 /**
  * Created by sean on 2017. 1. 8..

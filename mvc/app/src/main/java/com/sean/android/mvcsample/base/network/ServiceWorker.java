@@ -28,33 +28,42 @@ public abstract class ServiceWorker<T> implements Callback<T> {
     }
 
     public void executeAsync() {
-        if(serviceWorkEventListener != null) {
+        if (serviceWorkEventListener != null) {
             serviceWorkEventListener.onPreExecute();
         }
 
-        if(serviceCall == null) {
-            this.serviceCall = createService();
+        if (serviceCall == null) {
+            serviceCall = createService();
+        } else if (serviceCall.isExecuted()) {
+            serviceCall.cancel();
+            serviceCall = null;
+            serviceCall = createService();
         }
 
-        if (serviceCall != null && !serviceCall.isExecuted()) {
+        if (serviceCall != null) {
             serviceCall.enqueue(this);
         }
+
     }
 
     public Response<T> execute() throws IOException {
-        if(serviceWorkEventListener != null) {
+        if (serviceWorkEventListener != null) {
             serviceWorkEventListener.onPreExecute();
         }
 
-        if(serviceCall == null) {
-            this.serviceCall = createService();
+        if (serviceCall == null) {
+            serviceCall = createService();
+        } else if (serviceCall.isExecuted()) {
+            serviceCall.cancel();
+            serviceCall = null;
+            serviceCall = createService();
         }
+
         Response<T> responseData = null;
 
         if (serviceCall != null) {
             responseData = serviceCall.execute();
         }
-
         return responseData;
     }
 
@@ -68,21 +77,21 @@ public abstract class ServiceWorker<T> implements Callback<T> {
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
-        if(response.isSuccessful()) {
+        if (response.isSuccessful()) {
             HttpResponseData<T> httpResponseData = new HttpResponseData<>();
             httpResponseData.setStatusCode(response.code());
             httpResponseData.setResponseData(response.body());
             httpResponseData.setResponseHeaderMap(getHeaderMap(response.headers()));
 
 
-            if(serviceWorkEventListener != null) {
+            if (serviceWorkEventListener != null) {
                 serviceWorkEventListener.onComplete(httpResponseData);
             }
 
         } else {
-            if(serviceWorkEventListener != null) {
+            if (serviceWorkEventListener != null) {
                 String errorBodyStr = "";
-                if(response.errorBody() != null) {
+                if (response.errorBody() != null) {
                     try {
                         errorBodyStr = response.errorBody().string();
                     } catch (IOException e) {

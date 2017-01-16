@@ -1,4 +1,4 @@
-package com.sean.android.mvcsample.issues.model.dto;
+package com.sean.android.mvcsample.data.dto;
 
 import java.util.List;
 

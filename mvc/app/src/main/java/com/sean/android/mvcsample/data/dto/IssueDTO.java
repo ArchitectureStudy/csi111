@@ -1,6 +1,4 @@
-package com.sean.android.mvcsample.issues.model.dto;
-
-import java.util.Arrays;
+package com.sean.android.mvcsample.data.dto;
 
 /**
  * Created by sean on 2017. 1. 7..

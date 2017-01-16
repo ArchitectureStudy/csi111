@@ -1,8 +1,7 @@
-package com.sean.android.mvcsample.issues.model;
+package com.sean.android.mvcsample.data.issue;
 
 import com.sean.android.mvcsample.base.network.ServiceWorker;
-import com.sean.android.mvcsample.issues.model.dto.IssueDTO;
-import com.sean.android.mvcsample.issues.model.dto.IssuesDTO;
+import com.sean.android.mvcsample.data.dto.IssueDTO;
 
 import java.util.List;
 
@@ -29,7 +28,6 @@ public class GetIssuesFromGithubServiceWorker extends ServiceWorker<List<IssueDT
         if(githubUser != null) {
             return issueListService.issueList(githubUser.getUser(), githubUser.getRepository());
         }
-
         return null;
     }
 
