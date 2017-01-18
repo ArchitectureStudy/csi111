@@ -1,4 +1,4 @@
-package com.sean.android.mvcsample.issues;
+package com.sean.android.mvcsample.issuedetail;
 
 import com.sean.android.mvcsample.base.BasePresenter;
 import com.sean.android.mvcsample.base.BaseView;
@@ -13,19 +13,10 @@ import java.util.List;
 public interface IssuesContract {
 
     interface View extends BaseView<Presenter> {
-        void setLoadingIndicator(boolean active);
-
-        void showIssues(List<Issue> issueList);
-
-        boolean isActive();
-
-        void showLoadingIssuesError();
-
-        void showIssueDetailUI(int issueNumber);
     }
 
     interface Presenter extends BasePresenter {
-        void loadIssues(boolean forceUpdate);
+        void loadIssue(boolean forceUpdate);
 
         void clearIssues();
 

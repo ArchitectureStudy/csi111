@@ -11,6 +11,9 @@ import com.sean.android.mvcsample.data.issue.Issue;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
@@ -35,7 +38,15 @@ public class IssuesAdapter extends RecyclerView.Adapter<IssuesAdapter.IssuesView
     }
 
     @Override
-    public void onBindViewHolder(IssuesViewHolder holder, int position) {
+    public void onBindViewHolder(IssuesViewHolder holder, final int position) {
+        final Issue issue = mIssues.get(position);
+
+        holder.rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIssueItemListener.onIssueClick(issue);
+            }
+        });
         holder.titleTextView.setText(mIssues.get(position).getTitle());
         holder.idTextView.setText("#" + mIssues.get(position).getId());
     }
@@ -56,19 +67,23 @@ public class IssuesAdapter extends RecyclerView.Adapter<IssuesAdapter.IssuesView
 
 
     static class IssuesViewHolder extends RecyclerView.ViewHolder {
+        public View rootView;
+
+        @BindView(R.id.title_textView)
         public TextView titleTextView;
+
+        @BindView(R.id.id_textView)
         public TextView idTextView;
 
 
         public IssuesViewHolder(View itemView) {
             super(itemView);
-
-            idTextView = (TextView) itemView.findViewById(R.id.id_textView);
-            titleTextView = (TextView) itemView.findViewById(R.id.title_textView);
+            rootView = itemView;
+            ButterKnife.bind(this, itemView);
         }
     }
 
     public interface IssueItemListener {
-        void onIssueClick(Issue clickedIssue);
+        void onIssueClick(Issue issue);
     }
 }

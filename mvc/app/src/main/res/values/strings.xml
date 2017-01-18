@@ -4,4 +4,8 @@
     <string name="input_github_repository">Enter Github Repository</string>
     <string name="menu_title_inqueryIssues">Inquery Issues</string>
 
+
+
+    <string name="issues_title">Issue List</string>
+
 </resources>

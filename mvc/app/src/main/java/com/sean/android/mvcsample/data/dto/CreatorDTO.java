@@ -1,10 +1,10 @@
 package com.sean.android.mvcsample.data.dto;
 
 /**
- * Created by sean on 2017. 1. 7..
+ * Created by sean on 2017. 1. 19..
  */
 
-public class UserDTO {
+public class CreatorDTO {
     private String received_events_url;
 
     private String organizations_url;
@@ -23,7 +23,7 @@ public class UserDTO {
 
     private String url;
 
-    private int id;
+    private String id;
 
     private String html_url;
 
@@ -129,11 +129,13 @@ public class UserDTO {
         this.url = url;
     }
 
-    public int getId() {
+    public String getId ()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId (String id)
+    {
         this.id = id;
     }
 
@@ -207,9 +209,4 @@ public class UserDTO {
         this.followers_url = followers_url;
     }
 
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [received_events_url = "+received_events_url+", organizations_url = "+organizations_url+", avatar_url = "+avatar_url+", gravatar_id = "+gravatar_id+", gists_url = "+gists_url+", starred_url = "+starred_url+", site_admin = "+site_admin+", type = "+type+", url = "+url+", id = "+id+", html_url = "+html_url+", following_url = "+following_url+", events_url = "+events_url+", login = "+login+", subscriptions_url = "+subscriptions_url+", repos_url = "+repos_url+", followers_url = "+followers_url+"]";
-    }
 }

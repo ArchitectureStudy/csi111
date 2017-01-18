@@ -1,5 +1,6 @@
 package com.sean.android.mvcsample.issues;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,9 +12,12 @@ import android.view.ViewGroup;
 
 import com.sean.android.mvcsample.R;
 import com.sean.android.mvcsample.data.issue.Issue;
+import com.sean.android.mvcsample.issuedetail.IssueDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.sean.android.mvcsample.issuedetail.IssueDetailActivity.EXTRA_ISSUE_NUMBER;
 
 /**
  * Created by Seonil on 2017-01-16.
@@ -73,12 +77,19 @@ public class IssuesFragment extends Fragment implements IssuesContract.View, Iss
     }
 
     @Override
+    public void showIssueDetailUI(int issueNumber) {
+        Intent intent = new Intent(getContext(), IssueDetailActivity.class);
+        intent.putExtra(EXTRA_ISSUE_NUMBER, issueNumber);
+        startActivity(intent);
+    }
+
+    @Override
     public void setPresenter(@NonNull IssuesContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
     @Override
-    public void onIssueClick(Issue clickedIssue) {
-        mPresenter.openIssueDetail(clickedIssue);
+    public void onIssueClick(Issue issue) {
+        mPresenter.openIssueDetail(issue);
     }
 }

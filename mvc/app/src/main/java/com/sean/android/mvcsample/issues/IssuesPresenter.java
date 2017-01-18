@@ -41,7 +41,7 @@ public class IssuesPresenter implements IssuesContract.Presenter {
 
     @Override
     public void openIssueDetail(Issue issue) {
-
+        mIssuesView.showIssueDetailUI(issue.getNumber());
     }
 
     @Override
