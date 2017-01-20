@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class SharedPreferencesService {
     // 공유명칭
-    private static final String SHARED_PREFS_CONFIGURATION = "CgvConfiguration";
+    private static final String SHARED_PREFS_CONFIGURATION = "GithubConfiguration";
 
     private volatile static SharedPreferencesService sharedPreferencesManager;
     private SharedPreferences pref;
