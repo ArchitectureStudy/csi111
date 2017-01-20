@@ -13,7 +13,6 @@ public class SplashActivity extends AppCompatActivity implements OnSplashActionL
 
     SplashPresenter mSplashPresenter;
 
-
     @BindView(R.id.splash_main_view)
     SplashView splashView;
 

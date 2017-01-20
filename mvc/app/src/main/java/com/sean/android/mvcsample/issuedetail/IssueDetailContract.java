@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Seonil on 2017-01-16.
  */
 
-public interface IssuesContract {
+public interface IssueDetailContract {
 
     interface View extends BaseView<Presenter> {
     }

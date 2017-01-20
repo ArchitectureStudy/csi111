@@ -1,10 +1,11 @@
 package com.sean.android.mvcsample.data.issue;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.sean.android.mvcsample.base.network.HttpResponseData;
 import com.sean.android.mvcsample.base.network.ServiceWorker;
+import com.sean.android.mvcsample.base.util.GithubPreferenceKey;
+import com.sean.android.mvcsample.base.util.SharedPreferencesService;
 import com.sean.android.mvcsample.data.dto.IssueDTO;
 
 import java.util.List;
@@ -25,11 +26,21 @@ public class IssuesRepository implements IssuesDataSource {
     private boolean mCacheIsDirty = false;
 
     private IssuesRepository() {
-        GithubUser githubUser = createDummyData();
+        this(new GithubUser(SharedPreferencesService.getInstance().getPrefStringData(GithubPreferenceKey.PREF_GITHUB_ID_KEY), SharedPreferencesService.getInstance().getPrefStringData(GithubPreferenceKey.PREF_GITHUB_REPOSITORY_KEY)));
+    }
+
+    private IssuesRepository(GithubUser githubUser) {
         mGetIssuesFromGithubServiceWorker = new GetIssuesFromGithubServiceWorker(githubUser);
     }
 
     public static IssuesRepository getInstance() {
+        if (instance == null) {
+            instance = new IssuesRepository();
+        }
+        return instance;
+    }
+
+    public static IssuesRepository getInstance(GithubUser gitHubUser) {
         if (instance == null) {
             instance = new IssuesRepository();
         }
@@ -71,11 +82,6 @@ public class IssuesRepository implements IssuesDataSource {
             mCachedIssues.add(issue);
         }
         mCacheIsDirty = false;
-    }
-
-
-    private GithubUser createDummyData() {
-        return new GithubUser("JakeWharton", "DiskLruCache");
     }
 
     private void executeIssuesService(final LoadIssuesCallback loadIssuesCallback) {
