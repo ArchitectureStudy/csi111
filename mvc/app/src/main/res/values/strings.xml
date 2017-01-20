@@ -1,10 +1,15 @@
 <resources>
-    <string name="app_name">MVP Sample</string>
+    <string name="app_name">Git Client</string>
     <string name="input_github_id">Enter Github Id</string>
     <string name="input_github_repository">Enter Github Repository</string>
     <string name="menu_title_inqueryIssues">Inquery Issues</string>
 
 
+    <string name="hint_input_github_id">Input Github Id</string>
+    <string name="hint_input_github_repository">Input Github repository</string>
+    <string name="hint_input_github_access_token">Input Your AccessToken</string>
+
+    <string name="enter_main_page">Next Page</string>
 
     <string name="issues_title">Issue List</string>
 
