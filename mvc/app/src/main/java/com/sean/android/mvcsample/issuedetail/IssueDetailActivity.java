@@ -2,21 +2,13 @@ package com.sean.android.mvcsample.issuedetail;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.sean.android.mvcsample.R;
 import com.sean.android.mvcsample.base.util.ActivityUtils;
+import com.sean.android.mvcsample.data.comment.CommentsRepository;
 import com.sean.android.mvcsample.data.issue.IssuesRepository;
-import com.sean.android.mvcsample.issues.IssuesFragment;
-import com.sean.android.mvcsample.issues.IssuesPresenter;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by sean on 2017. 1. 18..
@@ -25,59 +17,40 @@ import butterknife.ButterKnife;
 public class IssueDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_ISSUE_NUMBER = "ISSUE_NUMBER";
+    public static final String EXTRA_ISSUE_TITLE = "ISSUE_TITLE";
+    public static final String EXTRA_ISSUE_BODY = "ISSUE_BODY";
 
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
-
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
+    IssueDetailPresenter mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issuedetail);
-        ButterKnife.bind(this);
 
-        ButterKnife.bind(this);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        int issueNumber = getIntent().getIntExtra(EXTRA_ISSUE_NUMBER, -1);
+        String issueTitle = getIntent().getStringExtra(EXTRA_ISSUE_TITLE);
+        String issueBody = getIntent().getStringExtra(EXTRA_ISSUE_BODY);
 
-//        if (navigationView != null) {
-//            setupDrawerContent(navigationView);
-//        }
+        IssueDetailFragment issueDetailFragment = (IssueDetailFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
 
-//        IssuesFragment issuesFragment = (IssuesFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-//
-//
-//        if (issuesFragment == null) {
-//            issuesFragment = IssuesFragment.newInstance();
-//            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), issuesFragment, R.id.contentFrame);
-//        }
+        if (issueDetailFragment == null) {
+            issueDetailFragment = IssueDetailFragment.newInstance();
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), issueDetailFragment, R.id.contentFrame);
+        }
 
-//        mPresenter = new IssuesPresenter(IssuesRepository.getInstance(), issuesFragment);
+        mPresenter = new IssueDetailPresenter(issueNumber, issueTitle, issueBody, CommentsRepository.getInstance(), IssuesRepository.getInstance(), issueDetailFragment);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.list_navigation_issues_item:
-                                break;
-
-                            default:
-                                break;
-                        }
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
-                    }
-                });
-    }
 }

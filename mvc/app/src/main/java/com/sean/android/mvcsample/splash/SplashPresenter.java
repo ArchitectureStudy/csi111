@@ -85,6 +85,6 @@ public class SplashPresenter implements SplashContract.Presenter {
 
     @Override
     public String loadGithubAccessToken() {
-        return sharedPreferencesService.getPrefStringData(GithubPreferenceKey.PREF_GITHUB_ACCESS_TOKEN_KEY, "");
+        return sharedPreferencesService.getPrefStringData(GithubPreferenceKey.PREF_GITHUB_ACCESS_TOKEN_KEY, mContext.getResources().getString(R.string.github_personal_token));
     }
 }

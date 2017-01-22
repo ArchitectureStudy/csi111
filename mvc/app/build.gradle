@@ -17,6 +17,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+        encoding = 'UTF-8'
+    }
+
+    dexOptions {
+        jumboMode true
+        javaMaxHeapSize "4g"
+    }
 }
 
 dependencies {

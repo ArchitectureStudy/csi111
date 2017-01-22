@@ -5,10 +5,5 @@ package com.sean.android.mvcsample.base.model;
  */
 
 public class Model {
-    protected ModelStateListener modelStateListener;
 
-
-    public void setModelStateListener(ModelStateListener modelStateListener) {
-        this.modelStateListener = modelStateListener;
-    }
 }

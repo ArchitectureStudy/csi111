@@ -16,7 +16,7 @@ public class IssueDTO {
 
     private AssigneeDTO assignee;
 
-    private String number;
+    private int number;
 
     private ClosedByDTO closed_by;
 
@@ -70,12 +70,12 @@ public class IssueDTO {
         this.state = state;
     }
 
-    public String getNumber ()
+    public int getNumber ()
     {
         return number;
     }
 
-    public void setNumber (String number)
+    public void setNumber (int number)
     {
         this.number = number;
     }

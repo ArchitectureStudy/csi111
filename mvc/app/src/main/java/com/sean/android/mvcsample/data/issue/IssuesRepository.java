@@ -6,6 +6,7 @@ import com.sean.android.mvcsample.base.network.HttpResponseData;
 import com.sean.android.mvcsample.base.network.ServiceWorker;
 import com.sean.android.mvcsample.base.util.GithubPreferenceKey;
 import com.sean.android.mvcsample.base.util.SharedPreferencesService;
+import com.sean.android.mvcsample.data.comment.GetIssueCommentsFromGithubServiceWorker;
 import com.sean.android.mvcsample.data.dto.IssueDTO;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public class IssuesRepository implements IssuesDataSource {
 
     private GetIssuesFromGithubServiceWorker mGetIssuesFromGithubServiceWorker;
 
+    private GetIssueFromGithubServiceWorker mGetIssueFromGithubServiceWorker;
+
     private Issues mCachedIssues;
 
     private boolean mCacheIsDirty = false;
@@ -31,6 +34,7 @@ public class IssuesRepository implements IssuesDataSource {
 
     private IssuesRepository(GithubUser githubUser) {
         mGetIssuesFromGithubServiceWorker = new GetIssuesFromGithubServiceWorker(githubUser);
+        mGetIssueFromGithubServiceWorker = new GetIssueFromGithubServiceWorker(githubUser);
     }
 
     public static IssuesRepository getInstance() {
@@ -64,7 +68,15 @@ public class IssuesRepository implements IssuesDataSource {
     }
 
     @Override
-    public void getIssue(@NonNull String issueNumber, LoadIssueCallback callback) {
+    public void getIssue(int issueNumber, LoadIssueCallback callback) {
+        checkNotNull(callback);
+
+        if (issueNumber < 0) {
+            callback.onIssueFailed();
+            return;
+        }
+
+        executeIssueService(issueNumber, callback);
 
     }
 
@@ -110,6 +122,32 @@ public class IssuesRepository implements IssuesDataSource {
                 loadIssuesCallback.onIssuesFailed();
             }
         });
+        mGetIssuesFromGithubServiceWorker.executeAsync();
+    }
+
+    private void executeIssueService(int number, final LoadIssueCallback loadIssuesCallback) {
+        mGetIssueFromGithubServiceWorker.setServiceWorkEventListener(new ServiceWorker.ServiceWorkEventListener() {
+            @Override
+            public void onPreExecute() {
+
+            }
+
+            @Override
+            public void onComplete(HttpResponseData result) {
+                Issue issue = new Issue();
+                if (result.getResponseData() instanceof IssueDTO) {
+                    issue = Issue.convertModel((IssueDTO) result.getResponseData());
+                }
+
+                loadIssuesCallback.onIssueLoaded(issue);
+            }
+
+            @Override
+            public void onFail(Throwable e) {
+                loadIssuesCallback.onIssueFailed();
+            }
+        });
+
         mGetIssuesFromGithubServiceWorker.executeAsync();
     }
 }
