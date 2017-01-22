@@ -25,7 +25,7 @@ public interface IssuesDataSource {
 
     void getIssues(@NonNull LoadIssuesCallback callback);
 
-    void getIssue(@NonNull String issueNumber, LoadIssueCallback callback);
+    void getIssue(int issueNumber, LoadIssueCallback callback);
 
     void refreshIssues();
 

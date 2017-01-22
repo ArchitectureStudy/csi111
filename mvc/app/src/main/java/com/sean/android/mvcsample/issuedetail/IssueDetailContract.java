@@ -2,6 +2,7 @@ package com.sean.android.mvcsample.issuedetail;
 
 import com.sean.android.mvcsample.base.BasePresenter;
 import com.sean.android.mvcsample.base.BaseView;
+import com.sean.android.mvcsample.data.comment.Comment;
 import com.sean.android.mvcsample.data.issue.Issue;
 
 import java.util.List;
@@ -10,16 +11,26 @@ import java.util.List;
  * Created by Seonil on 2017-01-16.
  */
 
-public interface IssuesContract {
+public interface IssueDetailContract {
 
     interface View extends BaseView<Presenter> {
+        void showIssueDetail(String title, String body);
+
+        void showComments(List<Comment> commentList);
+
     }
 
     interface Presenter extends BasePresenter {
         void loadIssue(boolean forceUpdate);
 
-        void clearIssues();
+        void loadComments(boolean forceUpdate);
 
-        void openIssueDetail(Issue issue);
+        void refreshIssue(boolean forceUpdate);
+
+        void refreshComments(boolean forceUpdate);
+
+        void postComment(String text);
+
+
     }
 }

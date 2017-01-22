@@ -17,7 +17,9 @@ import com.sean.android.mvcsample.issuedetail.IssueDetailActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sean.android.mvcsample.issuedetail.IssueDetailActivity.EXTRA_ISSUE_BODY;
 import static com.sean.android.mvcsample.issuedetail.IssueDetailActivity.EXTRA_ISSUE_NUMBER;
+import static com.sean.android.mvcsample.issuedetail.IssueDetailActivity.EXTRA_ISSUE_TITLE;
 
 /**
  * Created by Seonil on 2017-01-16.
@@ -77,9 +79,11 @@ public class IssuesFragment extends Fragment implements IssuesContract.View, Iss
     }
 
     @Override
-    public void showIssueDetailUI(int issueNumber) {
+    public void showIssueDetailUI(int issueNumber, String title, String body) {
         Intent intent = new Intent(getContext(), IssueDetailActivity.class);
         intent.putExtra(EXTRA_ISSUE_NUMBER, issueNumber);
+        intent.putExtra(EXTRA_ISSUE_TITLE, title);
+        intent.putExtra(EXTRA_ISSUE_BODY, body);
         startActivity(intent);
     }
 

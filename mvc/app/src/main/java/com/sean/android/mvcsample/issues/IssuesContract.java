@@ -21,7 +21,7 @@ public interface IssuesContract {
 
         void showLoadingIssuesError();
 
-        void showIssueDetailUI(int issueNumber);
+        void showIssueDetailUI(int issueNumber, String title, String body);
     }
 
     interface Presenter extends BasePresenter {

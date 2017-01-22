@@ -11,11 +11,5 @@ public class Issues extends ModelContainer<Issue> {
     @Override
     public void add(Issue model) {
         super.add(model);
-        if(modelStateListener != null) {
-            modelStateListener.onModelStateUpdated(this);
-        }
     }
-
-
-
 }

@@ -58,6 +58,7 @@ public class Issue extends Model {
     public static Issue convertModel(IssueDTO issueDTO) {
         Issue issue = new Issue();
         issue.setId(issueDTO.getId());
+        issue.setNumber(issueDTO.getNumber());
         issue.setTitle(issueDTO.getTitle());
         issue.setBody(issueDTO.getBody());
         issue.setState(issueDTO.getState());

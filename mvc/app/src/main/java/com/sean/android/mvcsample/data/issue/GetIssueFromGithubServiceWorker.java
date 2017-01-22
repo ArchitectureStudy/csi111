@@ -19,6 +19,10 @@ public class GetIssueFromGithubServiceWorker extends ServiceWorker<List<IssueDTO
 
     private int number;
 
+    public GetIssueFromGithubServiceWorker(GithubUser githubUser) {
+        this(githubUser, -1);
+    }
+
     public GetIssueFromGithubServiceWorker(GithubUser githubUser, int number) {
         this.githubUser = githubUser;
         this.number = number;
@@ -43,5 +47,9 @@ public class GetIssueFromGithubServiceWorker extends ServiceWorker<List<IssueDTO
 
         @GET("/repos/{user}/{repository}/issues/{number}")
         Call<List<IssueDTO>> issueList(@Path("user") String user, @Path("repository") String repository, @Path("number") int number);
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }
