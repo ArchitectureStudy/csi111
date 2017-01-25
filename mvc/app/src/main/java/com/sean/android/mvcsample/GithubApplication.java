@@ -14,6 +14,5 @@ public class GithubApplication extends Application {
     public void onCreate() {
         super.onCreate();
         SharedPreferencesService.getInstance().load(getApplicationContext());
-
     }
 }

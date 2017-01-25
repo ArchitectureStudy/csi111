@@ -3,6 +3,7 @@ package com.sean.android.mvcsample.base.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -38,6 +39,58 @@ public class SharedPreferencesService {
     public void load(Context context) {
         getPref(context);
     }
+
+    public <T> T getData(PreferenceKey preferenceKey) {
+        T valueData = null;
+
+        if (Boolean.class.equals(preferenceKey.getValueType())) {
+            valueData = (T) getData(preferenceKey, false);
+        } else if (Integer.class.equals(preferenceKey.getValueType())) {
+            valueData = (T) getData(preferenceKey, 0);
+        } else if (Long.class.equals(preferenceKey.getValueType())) {
+            valueData = (T) getData(preferenceKey, 0);
+        } else if (Float.class.equals(preferenceKey.getValueType())) {
+            valueData = (T) getData(preferenceKey, 0.f);
+        } else if (String.class.equals(preferenceKey.getValueType())) {
+            valueData = (T) getData(preferenceKey, "");
+        }
+        return valueData;
+    }
+
+    public <T> T getData(PreferenceKey preferenceKey, T defaultData) {
+        T valueData = null;
+
+        Class<T> classType = preferenceKey.getValueType();
+
+        Object value = null;
+
+        if (Boolean.class.equals(preferenceKey.getValueType())) {
+            value = getPrefBooleanData(preferenceKey.getKey(), (Boolean) defaultData);
+        } else if (Integer.class.equals(preferenceKey.getValueType())) {
+            value = getPrefIntegerData(preferenceKey.getKey(), (Integer) defaultData);
+        } else if (Long.class.equals(preferenceKey.getValueType())) {
+            value = getPrefLongData(preferenceKey.getKey(), (Long) defaultData);
+        } else if (Float.class.equals(preferenceKey.getValueType())) {
+            value = getPrefFloatData(preferenceKey.getKey(), (Float) defaultData);
+        } else if (String.class.equals(preferenceKey.getValueType())) {
+            value = getPrefStringData(preferenceKey.getKey(), (String) defaultData);
+        }
+
+        try {
+            valueData = classType.getConstructor(classType).newInstance(value);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        return valueData;
+    }
+
 
     public long getPrefLongData(String key) {
         return getPrefLongData(key, 0);
@@ -114,6 +167,22 @@ public class SharedPreferencesService {
 
         editor.putString(key, value);
         editor.commit();
+    }
+
+    public <T> void setPrefData(PreferenceKey preferenceKey, T value) {
+        if (value.getClass().equals(preferenceKey.getValueType())) {
+            if (value instanceof Boolean) {
+                setPrefData(preferenceKey.getKey(), (Boolean) value);
+            } else if (value instanceof Integer) {
+                setPrefData(preferenceKey.getKey(), (Integer) value);
+            } else if (value instanceof Long) {
+                setPrefData(preferenceKey.getKey(), (Long) value);
+            } else if (value instanceof Float) {
+                setPrefData(preferenceKey.getKey(), (Float) value);
+            } else if (value instanceof String) {
+                setPrefData(preferenceKey.getKey(), (String) value);
+            }
+        }
     }
 
 
