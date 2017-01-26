@@ -9,9 +9,9 @@ import retrofit2.Callback;
  */
 
 public interface ItemsAPI<T> {
-    <E extends List<T>> void asyncRequestItems(Callback callBack);
+    <E extends List<T>> void asyncRequestItems(Callback<E> callBack);
 
-    <T> void asyncRequestItem(Callback callBack);
+    <T> void asyncRequestItem(Callback<T> callBack);
 
     List<T> requestItems();
 

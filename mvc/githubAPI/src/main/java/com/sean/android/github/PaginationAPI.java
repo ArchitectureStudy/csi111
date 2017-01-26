@@ -10,7 +10,7 @@ import retrofit2.Callback;
 
 public interface PaginationAPI<T> extends ItemsAPI<T> {
 
-    <E extends List<T>> void asyncRequestNextPage(Callback callBack);
+    <E extends List<T>> void asyncRequestNextPage(Callback<E> callBack);
 
     List<T> requestNextPage();
 }
