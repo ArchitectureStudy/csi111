@@ -5,4 +5,9 @@ package com.sean.android.github.model;
  */
 
 public class GithubUser {
+    private final String userName;
+
+    public GithubUser(String userName) {
+        this.userName = userName;
+    }
 }

@@ -8,9 +8,9 @@ import retrofit2.Callback;
  * Created by Seonil on 2017-01-25.
  */
 
-public interface PaginationAPI<T> extends ItemsAPI {
+public interface PaginationAPI<T> extends ItemsAPI<T> {
 
-    void asyncRequestNextPage(Callback callBack);
+    <E extends List<T>> void asyncRequestNextPage(Callback callBack);
 
     List<T> requestNextPage();
 }

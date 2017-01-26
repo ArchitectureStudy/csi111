@@ -3,7 +3,6 @@ package com.sean.android.github;
 import com.sean.android.github.call.GithubAPICallService;
 import com.sean.android.github.model.GithubConfiguration;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import retrofit2.Retrofit;
@@ -26,7 +25,7 @@ public abstract class GithubAPI<T extends GithubAPICallService> {
     public GithubAPI(Class<T> clazz) {
         mCallClazz = clazz;
         mRetrofit = createRetrofit();
-        mHeaderMap = new HashMap<>();
+        initializeHeaderMap();
     }
 
     private Retrofit createRetrofit() {
@@ -38,11 +37,9 @@ public abstract class GithubAPI<T extends GithubAPICallService> {
     }
 
     private void initializeHeaderMap() {
-        if(mHeaderMap == null) {
-            mHeaderMap = new HashMap<>();
+        if (mHeaderMap == null) {
+            mHeaderMap = HeaderMatcher.pickHeaderListOut(GithubConfiguration.getInstance());
         }
-
-
     }
 
     protected T createCallService() {

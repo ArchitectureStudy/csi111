@@ -5,6 +5,7 @@ import com.sean.android.github.dto.IssueDTO;
 
 import java.util.List;
 
+import retrofit2.Call;
 import retrofit2.Callback;
 
 /**
@@ -21,7 +22,8 @@ public class IssueAPI extends GithubPaginationAPI<IssueCallService, IssueDTO> {
     }
 
     @Override
-    public void asyncRequestNextPage(Callback callBack) {
+    public <E extends List<IssueDTO>> void asyncRequestNextPage(Callback callBack) {
+        callService.issues(getHeaderMap(), getNextPageUrl()).enqueue(callBack);
     }
 
     @Override
@@ -30,22 +32,22 @@ public class IssueAPI extends GithubPaginationAPI<IssueCallService, IssueDTO> {
     }
 
     @Override
-    public void asyncRequestItems(Callback callBack) {
+    public <E extends List<IssueDTO>> void asyncRequestItems(Callback callBack) {
 
     }
 
     @Override
-    public void asyncRequestItem(Callback callBack) {
+    public <T> void asyncRequestItem(Callback callBack) {
 
     }
 
     @Override
-    public List requestItems() {
+    public List<IssueDTO> requestItems() {
         return null;
     }
 
     @Override
-    public Object requestItem() {
+    public IssueDTO requestItem() {
         return null;
     }
 }
