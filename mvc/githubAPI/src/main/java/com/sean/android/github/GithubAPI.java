@@ -1,6 +1,10 @@
 package com.sean.android.github;
 
 import com.sean.android.github.call.GithubAPICallService;
+import com.sean.android.github.model.GithubConfiguration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -11,26 +15,61 @@ import static com.sean.android.github.Config.PUBLIC_GITHUB_API_URL;
  * Created by Seonil on 2017-01-24.
  */
 
-public class GithubAPI<T extends GithubAPICallService> {
+public abstract class GithubAPI<T extends GithubAPICallService> {
 
-    protected Retrofit retrofit;
+    private Retrofit mRetrofit;
 
-    protected Class<T> callClazz;
+    protected Class<T> mCallClazz;
+
+    private Map<String, String> mHeaderMap;
 
     public GithubAPI(Class<T> clazz) {
-        callClazz = clazz;
-        retrofit = createRetrofit();
+        mCallClazz = clazz;
+        mRetrofit = createRetrofit();
+        mHeaderMap = new HashMap<>();
     }
 
-    protected Retrofit createRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(PUBLIC_GITHUB_API_URL)
+    private Retrofit createRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(getBaseURL())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         return retrofit;
     }
 
+    private void initializeHeaderMap() {
+        if(mHeaderMap == null) {
+            mHeaderMap = new HashMap<>();
+        }
+
+
+    }
+
     protected T createCallService() {
-        return retrofit.create(callClazz);
+        return mRetrofit.create(mCallClazz);
+    }
+
+    protected String getBaseURL() {
+        return PUBLIC_GITHUB_API_URL;
+    }
+
+    protected Retrofit getRetrofit() {
+        return mRetrofit;
+    }
+
+    public void addHeader(String key, String value) {
+        if (mHeaderMap != null) {
+            mHeaderMap.put(key, value);
+        }
+    }
+
+    public void removeHeader(String key) {
+        if (mHeaderMap != null) {
+            mHeaderMap.remove(key);
+        }
+    }
+
+    public Map<String, String> getHeaderMap() {
+        return mHeaderMap;
     }
 }
