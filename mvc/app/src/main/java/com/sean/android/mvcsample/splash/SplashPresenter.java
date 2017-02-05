@@ -3,8 +3,10 @@ package com.sean.android.mvcsample.splash;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.sean.android.github.model.GithubConfiguration;
 import com.sean.android.mvcsample.R;
 import com.sean.android.mvcsample.base.util.GithubPreferenceKey;
+import com.sean.android.mvcsample.base.util.PreferenceKey;
 import com.sean.android.mvcsample.base.util.SharedPreferencesService;
 import com.sean.android.mvcsample.base.util.StringUtil;
 
@@ -65,10 +67,12 @@ public class SplashPresenter implements SplashContract.Presenter {
             mView.showAlertToast(mContext.getString(R.string.alert_message_empty_accessToken));
         }
 
+        sharedPreferencesService.setPrefData(PreferenceKey.GITHUB_ID, mView.getGithubIdText());
+        sharedPreferencesService.setPrefData(PreferenceKey.GITHUB_REPOSITORY, mView.getGithubRepositoryText());
+        sharedPreferencesService.setPrefData(PreferenceKey.GITHUB_ACCESS_TOKEN, mView.getGithubAccessTokenText());
 
-        sharedPreferencesService.setPrefData(GithubPreferenceKey.PREF_GITHUB_ID_KEY, mView.getGithubIdText());
-        sharedPreferencesService.setPrefData(GithubPreferenceKey.PREF_GITHUB_REPOSITORY_KEY, mView.getGithubRepositoryText());
-        sharedPreferencesService.setPrefData(GithubPreferenceKey.PREF_GITHUB_ACCESS_TOKEN_KEY, mView.getGithubAccessTokenText());
+        //TODO Setting Github AccessToken
+        GithubConfiguration.getInstance().setAccessToken(mView.getGithubAccessTokenText());
 
         mView.showGithubMainUI();
     }

@@ -1,10 +1,10 @@
 package com.sean.android.mvcsample.data.comment;
 
+import com.sean.android.github.model.GithubUser;
 import com.sean.android.mvcsample.base.network.ServiceWorker;
 import com.sean.android.mvcsample.base.util.GithubPreferenceKey;
 import com.sean.android.mvcsample.base.util.SharedPreferencesService;
 import com.sean.android.mvcsample.data.dto.CommentDTO;
-import com.sean.android.mvcsample.data.issue.GithubUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +42,7 @@ public class PostIssueCommentFromGithubServiceWorker extends ServiceWorker<Comme
         PostCommentService postCommentService = retrofit.create(PostCommentService.class);
 
         if (githubUser != null) {
-            return postCommentService.postComment(githubUser.getUser(), githubUser.getRepository(), number, createHeaderMap(), createBodyMap(mCommentText));
+            return postCommentService.postComment(githubUser.getUserName(), githubUser.getUserRepository(), number, createHeaderMap(), createBodyMap(mCommentText));
         }
         return null;
     }
