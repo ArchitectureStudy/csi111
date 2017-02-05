@@ -16,7 +16,7 @@ import retrofit2.http.Path;
  * Created by Seonil on 2017-01-25.
  */
 
-public interface CommentCallService extends GithubAPICallService {
+public interface CommentCallService {
 
     @GET("/repos/{user}/{repository}/issues/{number}/comments")
     Call<List<CommentDTO>> comments(@Path("user") String user, @Path("repository") String repository, @Path("number") int number);

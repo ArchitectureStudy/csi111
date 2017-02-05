@@ -1,6 +1,5 @@
 package com.sean.android.github;
 
-import com.sean.android.github.call.GithubAPICallService;
 import com.sean.android.github.model.GithubConfiguration;
 
 import java.util.Map;
@@ -14,7 +13,7 @@ import static com.sean.android.github.Config.PUBLIC_GITHUB_API_URL;
  * Created by Seonil on 2017-01-24.
  */
 
-public abstract class GithubAPI<T extends GithubAPICallService> {
+public abstract class GithubAPI<T> {
 
     private Retrofit mRetrofit;
 

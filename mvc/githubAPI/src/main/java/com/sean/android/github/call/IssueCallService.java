@@ -16,20 +16,20 @@ import retrofit2.http.Path;
  * Created by Seonil on 2017-01-25.
  */
 
-public interface IssueCallService<T> extends GithubAPICallService {
+public interface IssueCallService {
 
     @GET("{fullPath}")
-    Call<List<T>> issues(@HeaderMap Map<String, String> headers, @Path(value = "fullPath", encoded = true) String fullPath);
+    Call<List<IssueDTO>> issues(@HeaderMap Map<String, String> headers, @Path(value = "fullPath", encoded = true) String fullPath);
 
     @GET("/repos/{owner}/{repository}/issues")
-    Call<List<T>> issues(@Path("owner") String owner, @Path("repository") String repository);
+    Call<List<IssueDTO>> issues(@Path("owner") String owner, @Path("repository") String repository);
 
     @GET("/orgs/{orgs}/issues")
-    Call<List<T>> issues(@Path("orgs") String organization);
+    Call<List<IssueDTO>> issues(@Path("orgs") String organization);
 
     @GET("/repos/{owner}/{repository}/issues/{number}")
-    Call<T> issue(@Path("owner") String owner, @Path("repository") String repository, @Path("number") int number);
+    Call<IssueDTO> issue(@Path("owner") String owner, @Path("repository") String repository, @Path("number") int number);
 
     @POST("/repos/{owner}/{repository}/issues")
-    Call<T> postIssue(@Path("owner") String owner, @Path("repository") String repository, @Body IssueDTO issueDTO);
+    Call<IssueDTO> postIssue(@Path("owner") String owner, @Path("repository") String repository, @Body IssueDTO issueDTO);
 }

@@ -1,9 +1,8 @@
 package com.sean.android.mvcsample.data.comment;
 
+import com.sean.android.github.model.GithubUser;
 import com.sean.android.mvcsample.base.network.ServiceWorker;
 import com.sean.android.mvcsample.data.dto.CommentDTO;
-import com.sean.android.mvcsample.data.dto.IssueDTO;
-import com.sean.android.mvcsample.data.issue.GithubUser;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class GetIssueCommentsFromGithubServiceWorker extends ServiceWorker<List<
         CommentListService  commentListService = retrofit.create(CommentListService .class);
 
         if(githubUser != null) {
-            return commentListService.issueList(githubUser.getUser(), githubUser.getRepository(), number);
+            return commentListService.issueList(githubUser.getUserName(), githubUser.getUserRepository(), number);
         }
         return null;
     }

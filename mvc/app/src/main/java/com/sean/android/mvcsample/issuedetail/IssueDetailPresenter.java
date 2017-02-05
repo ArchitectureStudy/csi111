@@ -47,7 +47,7 @@ public class IssueDetailPresenter implements IssueDetailContract.Presenter {
         mIssuesRepository.getIssue(mIssueNumber, new IssuesDataSource.LoadIssueCallback() {
             @Override
             public void onIssueLoaded(Issue issue) {
-
+                //TODO
             }
 
             @Override

@@ -3,6 +3,7 @@ package com.sean.android.mvcsample.splash;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.sean.android.github.model.GithubConfiguration;
 import com.sean.android.mvcsample.R;
 import com.sean.android.mvcsample.base.util.GithubPreferenceKey;
 import com.sean.android.mvcsample.base.util.PreferenceKey;
@@ -69,6 +70,9 @@ public class SplashPresenter implements SplashContract.Presenter {
         sharedPreferencesService.setPrefData(PreferenceKey.GITHUB_ID, mView.getGithubIdText());
         sharedPreferencesService.setPrefData(PreferenceKey.GITHUB_REPOSITORY, mView.getGithubRepositoryText());
         sharedPreferencesService.setPrefData(PreferenceKey.GITHUB_ACCESS_TOKEN, mView.getGithubAccessTokenText());
+
+        //TODO Setting Github AccessToken
+        GithubConfiguration.getInstance().setAccessToken(mView.getGithubAccessTokenText());
 
         mView.showGithubMainUI();
     }

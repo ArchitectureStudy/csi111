@@ -2,14 +2,20 @@ package com.sean.android.mvcsample.data.issue;
 
 import android.support.annotation.NonNull;
 
+import com.sean.android.github.IssueAPI;
+import com.sean.android.github.dto.IssueDTO;
 import com.sean.android.mvcsample.base.network.HttpResponseData;
 import com.sean.android.mvcsample.base.network.ServiceWorker;
 import com.sean.android.mvcsample.base.util.GithubPreferenceKey;
 import com.sean.android.mvcsample.base.util.SharedPreferencesService;
-import com.sean.android.mvcsample.data.comment.GetIssueCommentsFromGithubServiceWorker;
-import com.sean.android.mvcsample.data.dto.IssueDTO;
 
 import java.util.List;
+
+import com.sean.android.github.model.GithubUser;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -20,21 +26,22 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class IssuesRepository implements IssuesDataSource {
     private static IssuesRepository instance = null;
 
-    private GetIssuesFromGithubServiceWorker mGetIssuesFromGithubServiceWorker;
-
-    private GetIssueFromGithubServiceWorker mGetIssueFromGithubServiceWorker;
+    private IssueAPI issueAPI;
 
     private Issues mCachedIssues;
 
     private boolean mCacheIsDirty = false;
+
+    private GithubUser githubUser;
 
     private IssuesRepository() {
         this(new GithubUser(SharedPreferencesService.getInstance().getPrefStringData(GithubPreferenceKey.PREF_GITHUB_ID_KEY), SharedPreferencesService.getInstance().getPrefStringData(GithubPreferenceKey.PREF_GITHUB_REPOSITORY_KEY)));
     }
 
     private IssuesRepository(GithubUser githubUser) {
-        mGetIssuesFromGithubServiceWorker = new GetIssuesFromGithubServiceWorker(githubUser);
-        mGetIssueFromGithubServiceWorker = new GetIssueFromGithubServiceWorker(githubUser);
+        this.githubUser = githubUser;
+        issueAPI = new IssueAPI();
+
     }
 
     public static IssuesRepository getInstance() {
@@ -97,20 +104,13 @@ public class IssuesRepository implements IssuesDataSource {
     }
 
     private void executeIssuesService(final LoadIssuesCallback loadIssuesCallback) {
-        mGetIssuesFromGithubServiceWorker.setServiceWorkEventListener(new ServiceWorker.ServiceWorkEventListener() {
+        issueAPI.asyncRequestItems(githubUser.getUserName(), githubUser.getUserRepository(), new Callback<List<IssueDTO>>() {
             @Override
-            public void onPreExecute() {
-
-            }
-
-            @Override
-            public void onComplete(HttpResponseData result) {
+            public void onResponse(Call<List<IssueDTO>> call, Response<List<IssueDTO>> response) {
                 Issues issues = new Issues();
-                if (result.getResponseData() instanceof List) {
-                    List<IssueDTO> issuesDTO = (List<IssueDTO>) result.getResponseData();
-                    for (IssueDTO issueDTO : issuesDTO) {
-                        issues.add(Issue.convertModel(issueDTO));
-                    }
+                List<IssueDTO> issuesDTO = response.body();
+                for (IssueDTO issueDTO : issuesDTO) {
+                    issues.add(Issue.convertModel(issueDTO));
                 }
 
                 refreshCache(issues);
@@ -118,37 +118,25 @@ public class IssuesRepository implements IssuesDataSource {
             }
 
             @Override
-            public void onFail(Throwable e) {
+            public void onFailure(Call<List<com.sean.android.github.dto.IssueDTO>> call, Throwable t) {
                 loadIssuesCallback.onIssuesFailed();
             }
         });
-        mGetIssuesFromGithubServiceWorker.executeAsync();
     }
 
     private void executeIssueService(int number, final LoadIssueCallback loadIssuesCallback) {
-        mGetIssueFromGithubServiceWorker.setServiceWorkEventListener(new ServiceWorker.ServiceWorkEventListener() {
+        issueAPI.asyncRequestItem(githubUser.getUserName(), githubUser.getUserRepository(), number, new Callback<IssueDTO>() {
             @Override
-            public void onPreExecute() {
-
-            }
-
-            @Override
-            public void onComplete(HttpResponseData result) {
-                Issue issue = new Issue();
-                if (result.getResponseData() instanceof IssueDTO) {
-                    issue = Issue.convertModel((IssueDTO) result.getResponseData());
-                }
-
+            public void onResponse(Call<IssueDTO> call, Response<IssueDTO> response) {
+                Issue issue = Issue.convertModel(response.body());
                 loadIssuesCallback.onIssueLoaded(issue);
             }
 
             @Override
-            public void onFail(Throwable e) {
-                loadIssuesCallback.onIssueFailed();
+            public void onFailure(Call<IssueDTO> call, Throwable t) {
+
             }
         });
-
-        mGetIssuesFromGithubServiceWorker.executeAsync();
     }
 }
 
