@@ -72,8 +72,7 @@ public class IssuesPresenter implements IssuesContract.Presenter {
             }
 
             @Override
-            public void onIssuesFailed() {
-
+            public void onIssuesFailed(int code, String message) {
                 if (showLoadingUI) {
                     mIssuesView.setLoadingIndicator(false);
                 }

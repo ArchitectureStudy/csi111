@@ -2,14 +2,19 @@ package com.sean.android.mvcsample.data.comment;
 
 import android.support.annotation.NonNull;
 
+import com.sean.android.github.CommentAPI;
+import com.sean.android.github.dto.CommentDTO;
 import com.sean.android.github.model.GithubUser;
-import com.sean.android.mvcsample.base.network.HttpResponseData;
-import com.sean.android.mvcsample.base.network.ServiceWorker;
 import com.sean.android.mvcsample.base.util.GithubPreferenceKey;
 import com.sean.android.mvcsample.base.util.SharedPreferencesService;
-import com.sean.android.mvcsample.data.dto.CommentDTO;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by sean on 2017. 1. 21..
@@ -18,10 +23,9 @@ import java.util.List;
 public class CommentsRepository implements CommentsDataSource {
     private volatile static CommentsRepository instance = null;
 
-    private GetIssueCommentsFromGithubServiceWorker mGetIssueCommentsFromGithubServiceWorker;
+    private GithubUser mGithubUser;
 
-    private PostIssueCommentFromGithubServiceWorker mPostIssueCommentFromGithubServiceWorker;
-
+    private CommentAPI mCommentAPI;
 
     public static CommentsRepository getInstance() {
         if (instance == null) {
@@ -40,8 +44,8 @@ public class CommentsRepository implements CommentsDataSource {
     }
 
     private CommentsRepository(GithubUser githubUser) {
-        mGetIssueCommentsFromGithubServiceWorker = new GetIssueCommentsFromGithubServiceWorker(githubUser);
-        mPostIssueCommentFromGithubServiceWorker = new PostIssueCommentFromGithubServiceWorker(githubUser);
+        mGithubUser = githubUser;
+        mCommentAPI = new CommentAPI();
     }
 
     @Override
@@ -50,58 +54,56 @@ public class CommentsRepository implements CommentsDataSource {
     }
 
     @Override
-    public void postComments(int number, String body, @NonNull final PostCommentCallback callback) {
-        mPostIssueCommentFromGithubServiceWorker.setNumber(number);
-        mPostIssueCommentFromGithubServiceWorker.setCommentText(body);
-        mPostIssueCommentFromGithubServiceWorker.setServiceWorkEventListener(new ServiceWorker.ServiceWorkEventListener() {
-            @Override
-            public void onPreExecute() {
-
-            }
-
-            @Override
-            public void onComplete(HttpResponseData result) {
-                if(result.getResponseData() instanceof CommentDTO) {
-                    callback.onCommentPosted(Comment.convertModel((CommentDTO) result.getResponseData()));
+    public void createComment(int number, String body, @NonNull final PostCommentCallback callback) {
+        if (mCommentAPI != null) {
+            mCommentAPI.setIssueNumber(number);
+            mCommentAPI.asyncCreateItem(mGithubUser.getUserName(), mGithubUser.getUserRepository(), createBodyMap(body), new Callback<CommentDTO>() {
+                @Override
+                public void onResponse(Call<CommentDTO> call, Response<CommentDTO> response) {
+                    if (response.code() >= 200 && response.code() < 300) {
+                        callback.onCommentPosted(Comment.convertModel(response.body()));
+                    } else {
+                        callback.onCommentPostFailed(response.code(), response.message());
+                    }
                 }
-            }
 
-            @Override
-            public void onFail(Throwable e) {
-                callback.onCommentPostFailed();
-            }
-        });
-        mPostIssueCommentFromGithubServiceWorker.executeAsync();
-
+                @Override
+                public void onFailure(Call<CommentDTO> call, Throwable t) {
+                    callback.onCommentPostFailed(-1, t.getMessage());
+                }
+            });
+        }
     }
 
 
     private void executeCommentsService(int issueNumber, final LoadCommentsCallback loadCommentsCallback) {
-        mGetIssueCommentsFromGithubServiceWorker.setNumber(issueNumber);
-        mGetIssueCommentsFromGithubServiceWorker.setServiceWorkEventListener(new ServiceWorker.ServiceWorkEventListener() {
-            @Override
-            public void onPreExecute() {
-
-            }
-
-            @Override
-            public void onComplete(HttpResponseData result) {
-                Comments comments = new Comments();
-                if (result.getResponseData() instanceof List) {
-                    List<CommentDTO> coomentsDTO = (List<CommentDTO>) result.getResponseData();
-                    for (CommentDTO commentDTO : coomentsDTO) {
-                        comments.add(Comment.convertModel(commentDTO));
+        if (mCommentAPI != null) {
+            mCommentAPI.setIssueNumber(issueNumber);
+            mCommentAPI.asyncRequestItems(mGithubUser.getUserName(), mGithubUser.getUserRepository(), new Callback<List<CommentDTO>>() {
+                @Override
+                public void onResponse(Call<List<CommentDTO>> call, Response<List<CommentDTO>> response) {
+                    Comments comments = new Comments();
+                    if (response.code() >= 200 && response.code() < 300) {
+                        for (CommentDTO commentDTO : response.body()) {
+                            comments.add(Comment.convertModel(commentDTO));
+                        }
+                        loadCommentsCallback.onCommentsLoaded(comments);
+                    } else {
+                        loadCommentsCallback.onCommentsFailed(response.code(), response.message());
                     }
                 }
 
-                loadCommentsCallback.onCommentsLoaded(comments);
-            }
+                @Override
+                public void onFailure(Call<List<com.sean.android.github.dto.CommentDTO>> call, Throwable t) {
+                    loadCommentsCallback.onCommentsFailed(-1, t.getMessage());
+                }
+            });
+        }
+    }
 
-            @Override
-            public void onFail(Throwable e) {
-                loadCommentsCallback.onCommentsFailed();
-            }
-        });
-        mGetIssueCommentsFromGithubServiceWorker.executeAsync();
+    private Map<String, String> createBodyMap(String comment) {
+        Map<String, String> bodyMap = new HashMap<>();
+        bodyMap.put("body", comment);
+        return bodyMap;
     }
 }

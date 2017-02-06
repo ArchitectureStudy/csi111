@@ -1,10 +1,8 @@
 package com.sean.android.mvcsample.data.comment;
 
+import com.sean.android.github.dto.CommentDTO;
 import com.sean.android.mvcsample.base.model.Model;
 import com.sean.android.mvcsample.data.User;
-import com.sean.android.mvcsample.data.dto.CommentDTO;
-import com.sean.android.mvcsample.data.dto.IssueDTO;
-import com.sean.android.mvcsample.data.issue.Issue;
 
 /**
  * Created by sean on 2017. 1. 7..

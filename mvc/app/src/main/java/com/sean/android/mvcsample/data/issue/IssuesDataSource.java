@@ -14,13 +14,13 @@ public interface IssuesDataSource {
     interface LoadIssuesCallback {
         void onIssuesLoaded(Issues issues);
 
-        void onIssuesFailed();
+        void onIssuesFailed(int code, String message);
     }
 
     interface LoadIssueCallback {
         void onIssueLoaded(Issue issue);
 
-        void onIssueFailed();
+        void onIssueFailed(int code, String message);
     }
 
     void getIssues(@NonNull LoadIssuesCallback callback);

@@ -4,14 +4,11 @@ import android.support.annotation.NonNull;
 
 import com.sean.android.github.IssueAPI;
 import com.sean.android.github.dto.IssueDTO;
-import com.sean.android.mvcsample.base.network.HttpResponseData;
-import com.sean.android.mvcsample.base.network.ServiceWorker;
+import com.sean.android.github.model.GithubUser;
 import com.sean.android.mvcsample.base.util.GithubPreferenceKey;
 import com.sean.android.mvcsample.base.util.SharedPreferencesService;
 
 import java.util.List;
-
-import com.sean.android.github.model.GithubUser;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -79,7 +76,7 @@ public class IssuesRepository implements IssuesDataSource {
         checkNotNull(callback);
 
         if (issueNumber < 0) {
-            callback.onIssueFailed();
+            callback.onIssueFailed(-1, "doesn't set issueNumber");
             return;
         }
 
@@ -108,18 +105,22 @@ public class IssuesRepository implements IssuesDataSource {
             @Override
             public void onResponse(Call<List<IssueDTO>> call, Response<List<IssueDTO>> response) {
                 Issues issues = new Issues();
-                List<IssueDTO> issuesDTO = response.body();
-                for (IssueDTO issueDTO : issuesDTO) {
-                    issues.add(Issue.convertModel(issueDTO));
-                }
 
-                refreshCache(issues);
-                loadIssuesCallback.onIssuesLoaded(issues);
+                if (response.code() >= 200 && response.code() < 300) {
+                    List<IssueDTO> issuesDTO = response.body();
+                    for (IssueDTO issueDTO : issuesDTO) {
+                        issues.add(Issue.convertModel(issueDTO));
+                    }
+                    refreshCache(issues);
+                    loadIssuesCallback.onIssuesLoaded(issues);
+                } else {
+                    loadIssuesCallback.onIssuesFailed(response.code(), response.message());
+                }
             }
 
             @Override
             public void onFailure(Call<List<com.sean.android.github.dto.IssueDTO>> call, Throwable t) {
-                loadIssuesCallback.onIssuesFailed();
+                loadIssuesCallback.onIssuesFailed(-1, t.getMessage());
             }
         });
     }
@@ -128,13 +129,17 @@ public class IssuesRepository implements IssuesDataSource {
         issueAPI.asyncRequestItem(githubUser.getUserName(), githubUser.getUserRepository(), number, new Callback<IssueDTO>() {
             @Override
             public void onResponse(Call<IssueDTO> call, Response<IssueDTO> response) {
-                Issue issue = Issue.convertModel(response.body());
-                loadIssuesCallback.onIssueLoaded(issue);
+                if (response.code() >= 200 && response.code() < 300) {
+                    Issue issue = Issue.convertModel(response.body());
+                    loadIssuesCallback.onIssueLoaded(issue);
+                } else {
+                    loadIssuesCallback.onIssueFailed(response.code(), response.message());
+                }
             }
 
             @Override
             public void onFailure(Call<IssueDTO> call, Throwable t) {
-
+                loadIssuesCallback.onIssueFailed(-1, t.getMessage());
             }
         });
     }

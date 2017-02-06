@@ -14,12 +14,12 @@
     <string name="issues_title">Issue List</string>
 
     <string name="default_github_id">ArchitectureStudy</string>
-    <string name="default_github_repository">chope</string>
+    <string name="default_github_repository">study</string>
 
     <string name="alert_message_empty_id">Empty Github ID</string>
     <string name="alert_message_empty_repository">Empty Github Repository</string>
     <string name="alert_message_empty_accessToken">Empty Github AccessToken</string>
 
-    <string name="github_personal_token">a1850c7ac233f0aa6a823f3f1751d9fbee56c3dc</string>
+    <string name="github_personal_token">72cc4ace1609a1e727e29f346b904290ad2b5c2c</string>
 
 </resources>
