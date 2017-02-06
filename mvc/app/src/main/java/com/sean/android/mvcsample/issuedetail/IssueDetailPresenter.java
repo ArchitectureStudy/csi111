@@ -1,6 +1,7 @@
 package com.sean.android.mvcsample.issuedetail;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.sean.android.mvcsample.data.comment.Comment;
 import com.sean.android.mvcsample.data.comment.Comments;
@@ -51,8 +52,8 @@ public class IssueDetailPresenter implements IssueDetailContract.Presenter {
             }
 
             @Override
-            public void onIssueFailed() {
-
+            public void onIssueFailed(int code, String message) {
+                Log.d("TEST", "code =[" + code +"] message =[" + message+"]");
             }
         });
     }
@@ -66,8 +67,8 @@ public class IssueDetailPresenter implements IssueDetailContract.Presenter {
             }
 
             @Override
-            public void onCommentsFailed() {
-
+            public void onCommentsFailed(int code, String message) {
+                Log.d("TEST", "code =[" + code +"] message =[" + message+"]");
             }
         });
     }
@@ -84,15 +85,15 @@ public class IssueDetailPresenter implements IssueDetailContract.Presenter {
 
     @Override
     public void postComment(String text) {
-        mCommentsRepository.postComments(mIssueNumber, text, new CommentsDataSource.PostCommentCallback() {
+        mCommentsRepository.createComment(mIssueNumber, text, new CommentsDataSource.PostCommentCallback() {
             @Override
             public void onCommentPosted(Comment comment) {
                 loadComments(true);
             }
 
             @Override
-            public void onCommentPostFailed() {
-
+            public void onCommentPostFailed(int code, String message) {
+                Log.d("TEST", "code =[" + code +"] message =[" + message+"]");
             }
         });
     }

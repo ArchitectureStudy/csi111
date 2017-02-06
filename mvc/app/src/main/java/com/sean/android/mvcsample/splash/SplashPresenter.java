@@ -72,7 +72,7 @@ public class SplashPresenter implements SplashContract.Presenter {
         sharedPreferencesService.setPrefData(PreferenceKey.GITHUB_ACCESS_TOKEN, mView.getGithubAccessTokenText());
 
         //TODO Setting Github AccessToken
-        GithubConfiguration.getInstance().setAccessToken(mView.getGithubAccessTokenText());
+        GithubConfiguration.getInstance().setAccessToken("token " + mView.getGithubAccessTokenText());
 
         mView.showGithubMainUI();
     }

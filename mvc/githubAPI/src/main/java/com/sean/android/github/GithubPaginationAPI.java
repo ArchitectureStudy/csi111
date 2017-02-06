@@ -61,12 +61,13 @@ public abstract class GithubPaginationAPI<T, E> extends GithubAPI<T> implements 
     }
 
     private String patternMatch(String input) {
-        Pattern pattern = Pattern.compile(PATTERN_NEXT_PAGE);
-        Matcher matcher = pattern.matcher(input);
-        if (matcher.find()&& matcher.groupCount() > 0) {
-            return matcher.group(1);
-        } else {
-            return "";
+        if (input != null && input.length() > 0) {
+            Pattern pattern = Pattern.compile(PATTERN_NEXT_PAGE);
+            Matcher matcher = pattern.matcher(input);
+            if (matcher.find() && matcher.groupCount() > 0) {
+                return matcher.group(1);
+            }
         }
+        return "";
     }
 }
