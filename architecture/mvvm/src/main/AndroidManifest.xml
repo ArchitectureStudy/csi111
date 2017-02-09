@@ -1,9 +1,32 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sean.android.mvvmsample">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application android:allowBackup="true" android:icon="@mipmap/ic_launcher"
+        android:name=".GithubApplication"
         android:label="@string/app_name" android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name="com.sean.android.mvvmsample.ui.splash.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sean.android.mvvmsample.ui.issues.IssuesActivity"
+            android:theme="@style/AppTheme.OverlapSystemBar" />
+
+        <activity
+            android:name="com.sean.android.mvvmsample.ui.issuedetail.IssueDetailActivity"
+            android:theme="@style/AppTheme.OverlapSystemBar" />
+
 
     </application>
 
