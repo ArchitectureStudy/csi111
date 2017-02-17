@@ -1,4 +1,4 @@
-package com.sean.android.github;
+package com.sean.android.github.api.comment;
 
 import java.util.Map;
 

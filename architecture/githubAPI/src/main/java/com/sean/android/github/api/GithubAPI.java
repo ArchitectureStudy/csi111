@@ -1,5 +1,6 @@
-package com.sean.android.github;
+package com.sean.android.github.api;
 
+import com.sean.android.github.HeaderMatcher;
 import com.sean.android.github.model.GithubConfiguration;
 
 import java.util.Map;

@@ -2,7 +2,7 @@ package com.sean.android.mvpsample.data.issue;
 
 import android.support.annotation.NonNull;
 
-import com.sean.android.github.IssueAPI;
+import com.sean.android.github.api.issue.IssueAPI;
 import com.sean.android.github.dto.IssueDTO;
 import com.sean.android.github.model.GithubUser;
 import com.sean.android.mvpsample.base.util.GithubPreferenceKey;

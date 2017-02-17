@@ -2,17 +2,19 @@ package com.sean.android.mvvmsample.ui.splash.viewmodel;
 
 import android.view.View;
 
+import com.sean.android.mvvmsample.base.databinding.BindableString;
+
 /**
  * Created by Seonil on 2017-02-09.
  */
 
 public interface SplashViewModel {
 
-    String getIdText();
+    BindableString getIdText();
 
-    String getRepositoryText();
+    BindableString getRepositoryText();
 
-    String getAccessTokenText();
+    BindableString getAccessTokenText();
 
     void onClickMoveMain(View view);
 

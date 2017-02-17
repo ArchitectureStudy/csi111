@@ -1,5 +1,6 @@
-package com.sean.android.github;
+package com.sean.android.github.api.comment;
 
+import com.sean.android.github.api.GithubPaginationAPI;
 import com.sean.android.github.call.CommentCallService;
 import com.sean.android.github.dto.CommentDTO;
 

@@ -2,7 +2,7 @@ package com.sean.android.mvpsample.data.comment;
 
 import android.support.annotation.NonNull;
 
-import com.sean.android.github.CommentAPI;
+import com.sean.android.github.api.comment.CommentAPI;
 import com.sean.android.github.dto.CommentDTO;
 import com.sean.android.github.model.GithubUser;
 import com.sean.android.mvpsample.base.util.GithubPreferenceKey;

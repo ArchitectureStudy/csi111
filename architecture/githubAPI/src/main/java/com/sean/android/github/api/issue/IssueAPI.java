@@ -1,5 +1,6 @@
-package com.sean.android.github;
+package com.sean.android.github.api.issue;
 
+import com.sean.android.github.api.GithubPaginationAPI;
 import com.sean.android.github.call.IssueCallService;
 import com.sean.android.github.dto.IssueDTO;
 
@@ -7,10 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Headers;
 
 /**
  * Created by Seonil on 2017-01-25.

@@ -10,6 +10,7 @@ ext {
     mockitoVersion = '1.10.19'
     robolectricVersion = '3.0'
     espressoVersion = '2.2.2'
+    parcelerVersion = '1.1.1'
 
     //Packages
     supportPackage = 'com.android.support'
@@ -23,6 +24,7 @@ ext {
     mockitoPackage = 'org.mockito'
     robolectricPackage = 'org.robolectric'
     espressoPackage = 'com.android.support.test.espresso'
+    parcelerPackage = 'org.parceler'
 
     supportDependencies = [design           : buildDependency(supportPackage, 'design', supportVersion),
                            recyclerView     : buildDependency(supportPackage, 'recyclerview-v7', supportVersion),
@@ -41,6 +43,9 @@ ext {
     butterknife = buildDependency(jakeWhartonPackage, 'butterknife', butterknifeVersion)
     butterknifeProcesser = buildDependency(jakeWhartonPackage, 'butterknife-compiler', butterknifeVersion)
     glide = buildDependency(glidePackage, 'glide', glideVersion)
+
+    parceler  = buildDependency(parcelerPackage, 'parceler-api', parcelerVersion)
+    parcelerApt = buildDependency(parcelerPackage, 'parceler', parcelerVersion)
 
     testingDependencies = [junit      : buildDependency(junitPackage, 'junit', junitVersion),
                            mockito    : buildDependency(mockitoPackage, 'mockito-core', mockitoVersion),

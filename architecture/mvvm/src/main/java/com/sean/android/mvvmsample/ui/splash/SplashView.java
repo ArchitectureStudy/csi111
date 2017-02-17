@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -23,9 +24,6 @@ import butterknife.ButterKnife;
  */
 
 public class SplashView extends RelativeLayout {
-
-
-    private OnSplashActionListener onSplashActionListener;
 
     private SplashViewBinding mSplashViewBinding;
 
@@ -56,8 +54,6 @@ public class SplashView extends RelativeLayout {
         ButterKnife.bind(this);
 
         mSplashViewBinding.setSplashViewModel(mSplashViewModel);
-
-
     }
 
 
@@ -84,8 +80,6 @@ public class SplashView extends RelativeLayout {
 
     public void showGithubMainUI() {
         getContext().startActivity(new Intent(getContext(), IssuesActivity.class));
-        if (onSplashActionListener != null) {
-        }
     }
 
     public void showAlertToast(String toastMessage) {
@@ -93,10 +87,6 @@ public class SplashView extends RelativeLayout {
     }
 
     public void onClickMoveMain(View view) {
-    }
-
-    public void setOnSplashActionListener(OnSplashActionListener onSplashActionListener) {
-        this.onSplashActionListener = onSplashActionListener;
-        mSplashViewBinding.setActionHandler(onSplashActionListener);
+        Log.d("TEST", "onClickMovieMain");
     }
 }
