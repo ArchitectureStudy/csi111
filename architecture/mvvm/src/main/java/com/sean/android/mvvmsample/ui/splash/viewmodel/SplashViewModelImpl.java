@@ -9,18 +9,16 @@ import com.sean.android.mvvmsample.base.util.GithubPreferenceKey;
 import com.sean.android.mvvmsample.base.util.SharedPreferencesService;
 import com.sean.android.mvvmsample.base.util.StringUtil;
 
-import java.util.Observable;
-
 import rx.Subscription;
 
 /**
  * Created by Seonil on 2017-02-10.
- *
+ * <p>
  * Reference https://github.com/coding-jam/databinding.git
  * https://github.com/erikcaffrey/People-MVVM.git
  */
 
-public class SplashViewModelImpl extends Observable implements SplashViewModel {
+public class SplashViewModelImpl implements SplashViewModel {
 
     private SharedPreferencesService sharedPreferencesService;
     private Context mContext;

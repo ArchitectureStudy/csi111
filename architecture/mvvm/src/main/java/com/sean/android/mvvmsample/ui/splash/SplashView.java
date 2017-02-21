@@ -2,6 +2,7 @@ package com.sean.android.mvvmsample.ui.splash;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.BindingMethod;
 import android.databinding.DataBindingUtil;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.sean.android.mvvmsample.R;
+import com.sean.android.mvvmsample.base.viewmodel.ViewModel;
 import com.sean.android.mvvmsample.databinding.SplashViewBinding;
 import com.sean.android.mvvmsample.ui.issues.IssuesActivity;
 import com.sean.android.mvvmsample.ui.splash.viewmodel.SplashViewModel;
@@ -65,18 +67,6 @@ public class SplashView extends RelativeLayout {
         mSplashViewBinding.inputGithubAccessTokenLayout.animate().setDuration(1000).alpha(1.0f).setStartDelay(300).start();
         mSplashViewBinding.enterMainPageButton.animate().scaleY(1.0f).scaleX(1.0f).setDuration(1000).alpha(1.0f).start();
     }
-
-//    public String getGithubIdText() {
-//        return mSplashViewBinding.inputGithubIdEditText.getText().toString();
-//    }
-//
-//    public String getGithubRepositoryText() {
-//        return mGithubRepoInputText.getText().toString();
-//    }
-//
-//    public String getGithubAccessTokenText() {
-//        return mGithubAccessTokenInputText.getText().toString();
-//    }
 
     public void showGithubMainUI() {
         getContext().startActivity(new Intent(getContext(), IssuesActivity.class));

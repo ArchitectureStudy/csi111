@@ -49,7 +49,7 @@
                 android:inputType="text|textVisiblePassword"
                 android:lines="1"
                 android:nextFocusForward="@+id/input_github_repo_editText"
-                android:text="@{splashViewModel.idText}" />
+                app:binding="@{splashViewModel.idText" />
         </android.support.design.widget.TextInputLayout>
 
 

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sean.android.mvvmsample.ui.splash.SplashView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/splash_main_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="splashViewHandlerModel"
+            type="com.sean.android.mvvmsample.ui.splash.viewmodel.SplashViewHandlerModel" />
+    </data>
+
+    <com.sean.android.mvvmsample.ui.splash.SplashView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/splash_main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</layout>
