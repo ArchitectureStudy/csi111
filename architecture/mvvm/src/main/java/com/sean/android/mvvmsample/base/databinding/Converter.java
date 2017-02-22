@@ -9,6 +9,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.sean.android.mvvmsample.R;
+import com.sean.android.mvvmsample.base.viewmodel.ViewModel;
 
 /**
  * Created by Seonil on 2017-02-17.

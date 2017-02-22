@@ -23,7 +23,6 @@ public class BindableString extends BaseObservable {
             notifyChange();
         }
     }
-
     public boolean isEmpty() {
         return value == null || value.isEmpty();
     }

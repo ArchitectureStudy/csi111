@@ -17,6 +17,5 @@ public interface SplashViewModel extends ViewModel {
 
     BindableString getAccessTokenText();
 
-    void onClickMoveMain(View view);
-
+    void onClickEnterMainView(View view);
 }
