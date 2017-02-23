@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sean.android.mvvmsample.base.view.ScrollChildSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
-        android:id="@+id/issuesContainer"
+
+    <data>
+
+        <variable
+            name="issueViewModel"
+            type="com.sean.android.mvvmsample.ui.issues.viewmodel.IssuesVIewModel" />
+    </data>
+
+    <com.sean.android.mvvmsample.base.view.ScrollChildSwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
+        android:background="#FFFFFF"
         android:orientation="vertical">
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/issues_recyclerView"
+        <RelativeLayout
+            android:id="@+id/issuesContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:orientation="vertical">
 
-    </RelativeLayout>
 
-</com.sean.android.mvvmsample.base.view.ScrollChildSwipeRefreshLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/issues_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
+        </RelativeLayout>
+
+    </com.sean.android.mvvmsample.base.view.ScrollChildSwipeRefreshLayout>
+
+</layout>

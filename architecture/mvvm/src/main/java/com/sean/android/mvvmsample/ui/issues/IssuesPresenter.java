@@ -54,11 +54,6 @@ public class IssuesPresenter implements IssuesContract.Presenter {
             mIssuesView.setLoadingIndicator(true);
         }
 
-        if (forceUpdate) {
-            mIssuesRepository.refreshIssues();
-        }
-
-
         mIssuesRepository.getIssues(new IssuesDataSource.LoadIssuesCallback() {
             @Override
             public void onIssuesLoaded(Issues issues) {

@@ -1,21 +1,25 @@
 package com.sean.android.mvvmsample.ui.issues;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sean.android.mvvmsample.R;
 import com.sean.android.mvvmsample.data.issue.Issue;
+import com.sean.android.mvvmsample.databinding.FragmentIssuesBinding;
 import com.sean.android.mvvmsample.ui.issuedetail.IssueDetailActivity;
+import com.sean.android.mvvmsample.ui.issues.viewmodel.IssuesVIewModel;
+import com.sean.android.mvvmsample.ui.issues.viewmodel.IssuesViewModelImpl;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.sean.android.mvvmsample.ui.issuedetail.IssueDetailActivity.EXTRA_ISSUE_BODY;
 import static com.sean.android.mvvmsample.ui.issuedetail.IssueDetailActivity.EXTRA_ISSUE_NUMBER;
@@ -25,16 +29,29 @@ import static com.sean.android.mvvmsample.ui.issuedetail.IssueDetailActivity.EXT
  * Created by Seonil on 2017-01-16.
  */
 
-public class IssuesFragment extends Fragment implements IssuesContract.View, IssuesAdapter.IssueItemListener {
-
-    private IssuesContract.Presenter mPresenter;
+public class IssuesFragment extends Fragment implements IssuesAdapter.IssueItemListener {
 
     private IssuesAdapter mIssuesAdapter;
 
-    private RecyclerView mRecyclerView;
+    private FragmentIssuesBinding fragmentIssuesBinding;
+
+    private IssuesVIewModel issuesVIewModel;
 
     public static IssuesFragment newInstance() {
         return new IssuesFragment();
+    }
+
+    @TargetApi(23)
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        issuesVIewModel = new IssuesViewModelImpl(context);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        issuesVIewModel = new IssuesViewModelImpl(activity);
     }
 
     @Override
@@ -46,39 +63,28 @@ public class IssuesFragment extends Fragment implements IssuesContract.View, Iss
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_issues, container, false);
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.issues_recyclerView);
-        mRecyclerView.setLayoutManager(new IssuesRecyclerViewLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mIssuesAdapter);
-        return root;
+        fragmentIssuesBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_issues, container, false);
+        return fragmentIssuesBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        fragmentIssuesBinding.issuesRecyclerView.setLayoutManager(new IssuesRecyclerViewLayoutManager(getContext()));
+
+        if (mIssuesAdapter != null && mIssuesAdapter.getItemCount() > 0) {
+            fragmentIssuesBinding.issuesRecyclerView.setAdapter(mIssuesAdapter);
+        } else {
+            issuesVIewModel.fetchIssues();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.start();
     }
 
 
-    @Override
-    public void setLoadingIndicator(boolean active) {
-    }
-
-    @Override
-    public void showIssues(List<Issue> issueList) {
-        mIssuesAdapter.replaceData(issueList);
-    }
-
-    @Override
-    public boolean isActive() {
-        return isAdded();
-    }
-
-    @Override
-    public void showLoadingIssuesError() {
-    }
-
-    @Override
     public void showIssueDetailUI(int issueNumber, String title, String body) {
         Intent intent = new Intent(getContext(), IssueDetailActivity.class);
         intent.putExtra(EXTRA_ISSUE_NUMBER, issueNumber);
@@ -88,12 +94,7 @@ public class IssuesFragment extends Fragment implements IssuesContract.View, Iss
     }
 
     @Override
-    public void setPresenter(@NonNull IssuesContract.Presenter presenter) {
-        mPresenter = presenter;
-    }
-
-    @Override
     public void onIssueClick(Issue issue) {
-        mPresenter.openIssueDetail(issue);
+
     }
 }

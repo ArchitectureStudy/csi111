@@ -51,4 +51,5 @@
             app:headerLayout="@layout/layout_nav_header"
             app:menu="@menu/drawer_actions" />
     </android.support.v4.widget.DrawerLayout>
+
 </layout>

@@ -45,17 +45,17 @@ public class IssueDetailPresenter implements IssueDetailContract.Presenter {
 
     @Override
     public void loadIssue(boolean forceUpdate) {
-        mIssuesRepository.getIssue(mIssueNumber, new IssuesDataSource.LoadIssueCallback() {
-            @Override
-            public void onIssueLoaded(Issue issue) {
-                //TODO
-            }
-
-            @Override
-            public void onIssueFailed(int code, String message) {
-                Log.d("TEST", "code =[" + code +"] message =[" + message+"]");
-            }
-        });
+//        mIssuesRepository.getIssue(mIssueNumber, new IssuesDataSource.LoadIssueCallback() {
+//            @Override
+//            public void onIssueLoaded(Issue issue) {
+//                //TODO
+//            }
+//
+//            @Override
+//            public void onIssueFailed(int code, String message) {
+//                Log.d("TEST", "code =[" + code +"] message =[" + message+"]");
+//            }
+//        });
     }
 
     @Override

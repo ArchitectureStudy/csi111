@@ -5,5 +5,9 @@ package com.sean.android.mvvmsample.ui.issues.viewmodel;
  */
 
 public interface IssuesVIewModel {
-    void reloadIssues();
+    void refreshIssues();
+
+    void fetchIssues();
+
+    boolean showIndicator();
 }

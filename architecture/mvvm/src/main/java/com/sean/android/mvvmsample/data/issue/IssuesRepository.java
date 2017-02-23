@@ -25,9 +25,7 @@ public class IssuesRepository implements IssuesDataSource {
 
     private IssueAPI issueAPI;
 
-    private Issues mCachedIssues;
-
-    private boolean mCacheIsDirty = false;
+    private Issues mIssues;
 
     private GithubUser githubUser;
 
@@ -50,29 +48,29 @@ public class IssuesRepository implements IssuesDataSource {
 
     public static IssuesRepository getInstance(GithubUser gitHubUser) {
         if (instance == null) {
-            instance = new IssuesRepository();
+            instance = new IssuesRepository(gitHubUser);
         }
         return instance;
     }
 
     @Override
-    public void getIssues(@NonNull LoadIssuesCallback callback) {
+    public void fetchIssues(@NonNull LoadIssuesCallback callback) {
         checkNotNull(callback);
+        executeIssuesService(callback);
+    }
 
-        if (mCachedIssues != null && !mCacheIsDirty) {
-            callback.onIssuesLoaded(mCachedIssues);
-            return;
-        }
-
-        if (mCacheIsDirty) {
-            executeIssuesService(callback);
-        }
-
+    @Override
+    public void fetchIssues() {
 
     }
 
     @Override
-    public void getIssue(int issueNumber, LoadIssueCallback callback) {
+    public Issues getIssues() {
+        return mIssues;
+    }
+
+    @Override
+    public void fetchIssue(int issueNumber, LoadIssueCallback callback) {
         checkNotNull(callback);
 
         if (issueNumber < 0) {
@@ -81,23 +79,26 @@ public class IssuesRepository implements IssuesDataSource {
         }
 
         executeIssueService(issueNumber, callback);
-
     }
 
     @Override
-    public void refreshIssues() {
-        mCacheIsDirty = true;
+    public void fetchIssue(int issueNumber) {
+        executeIssueService(issueNumber, null);
+    }
+
+    @Override
+    public Issue getIssue(int issueNumber) {
+        return null;
     }
 
     private void refreshCache(Issues issues) {
-        if (mCachedIssues == null) {
-            mCachedIssues = new Issues();
+        if (mIssues == null) {
+            mIssues = new Issues();
         }
-        mCachedIssues.clear();
+        mIssues.clear();
         for (Issue issue : issues) {
-            mCachedIssues.add(issue);
+            mIssues.add(issue);
         }
-        mCacheIsDirty = false;
     }
 
     private void executeIssuesService(final LoadIssuesCallback loadIssuesCallback) {
@@ -112,9 +113,13 @@ public class IssuesRepository implements IssuesDataSource {
                         issues.add(Issue.convertModel(issueDTO));
                     }
                     refreshCache(issues);
-                    loadIssuesCallback.onIssuesLoaded(issues);
+                    if (loadIssuesCallback != null) {
+                        loadIssuesCallback.onIssuesLoaded(issues);
+                    }
                 } else {
-                    loadIssuesCallback.onIssuesFailed(response.code(), response.message());
+                    if (loadIssuesCallback != null) {
+                        loadIssuesCallback.onIssuesFailed(response.code(), response.message());
+                    }
                 }
             }
 

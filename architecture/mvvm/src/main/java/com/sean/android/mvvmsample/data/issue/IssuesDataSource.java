@@ -20,11 +20,16 @@ public interface IssuesDataSource {
         void onIssueFailed(int code, String message);
     }
 
-    void getIssues(@NonNull LoadIssuesCallback callback);
+    void fetchIssues(@NonNull LoadIssuesCallback callback);
 
-    void getIssue(int issueNumber, LoadIssueCallback callback);
+    void fetchIssues();
 
-    void refreshIssues();
+    Issues getIssues();
 
+    void fetchIssue(int issueNumber, LoadIssueCallback callback);
+
+    void fetchIssue(int issueNumber);
+
+    Issue getIssue(int issueNumber);
 
 }

@@ -9,10 +9,7 @@ import android.view.MenuItem;
 
 import com.sean.android.mvvmsample.R;
 import com.sean.android.mvvmsample.base.util.ActivityUtils;
-import com.sean.android.mvvmsample.data.issue.IssuesRepository;
 import com.sean.android.mvvmsample.databinding.ActivityIssuesBinding;
-
-import butterknife.ButterKnife;
 
 
 /**
@@ -22,10 +19,7 @@ import butterknife.ButterKnife;
  */
 public class IssuesActivity extends AppCompatActivity {
 
-    IssuesPresenter mPresenter;
-
-    ActivityIssuesBinding activityIssuesBinding;
-
+    private ActivityIssuesBinding activityIssuesBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +29,12 @@ public class IssuesActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (activityIssuesBinding.navView != null) {
-            setupDrawerContent(activityIssuesBinding.navView);
-        }
-
         IssuesFragment issuesFragment = (IssuesFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-
 
         if (issuesFragment == null) {
             issuesFragment = IssuesFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), issuesFragment, R.id.contentFrame);
         }
-
-        mPresenter = new IssuesPresenter(IssuesRepository.getInstance(), issuesFragment);
     }
 
     @Override
@@ -61,23 +48,19 @@ public class IssuesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private NavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.list_navigation_issues_item:
+                    break;
 
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.list_navigation_issues_item:
-                                break;
-
-                            default:
-                                break;
-                        }
-                        menuItem.setChecked(true);
-                        activityIssuesBinding.drawerLayout.closeDrawers();
-                        return true;
-                    }
-                });
-    }
+                default:
+                    break;
+            }
+            menuItem.setChecked(true);
+            activityIssuesBinding.drawerLayout.closeDrawers();
+            return true;
+        }
+    };
 }
