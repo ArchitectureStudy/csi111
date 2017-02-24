@@ -2,7 +2,8 @@ ext {
 
     supportVersion = '25.1.0'
     retrofitVersion = '2.1.0'
-    rxAndroidVersion = '1.0.1'
+    rxAndroidVersion = '1.1.0'
+    rxBindingVersion = '0.3.0'
     butterknifeVersion = '8.4.0'
     glideVersion = '3.6.1'
 
@@ -18,6 +19,7 @@ ext {
     reactivePackage = 'io.reactivex'
 
     jakeWhartonPackage = 'com.jakewharton'
+    jakeWhartonRxPackage = 'com.jakewharton.rxbinding'
     glidePackage = 'com.github.bumptech.glide'
 
     junitPackage = 'junit'
@@ -38,19 +40,22 @@ ext {
                             gson         : buildDependency(retrofitPackage, 'converter-gson', retrofitVersion),
                             rxAdapterJava: buildDependency(retrofitPackage, 'adapter-rxjava', retrofitVersion)]
 
-    rxDependencies = [rxAndroid: buildDependency(reactivePackage, 'rxandroid', rxAndroidVersion)]
+    rxDependencies = [rxAndroid: buildDependency(reactivePackage, 'rxandroid', rxAndroidVersion),
+                      rxBinding: buildDependency(jakeWhartonRxPackage, 'rxbinding', rxBindingVersion)]
+
 
     butterknife = buildDependency(jakeWhartonPackage, 'butterknife', butterknifeVersion)
     butterknifeProcesser = buildDependency(jakeWhartonPackage, 'butterknife-compiler', butterknifeVersion)
     glide = buildDependency(glidePackage, 'glide', glideVersion)
 
-    parceler  = buildDependency(parcelerPackage, 'parceler-api', parcelerVersion)
+
+    parceler = buildDependency(parcelerPackage, 'parceler-api', parcelerVersion)
     parcelerApt = buildDependency(parcelerPackage, 'parceler', parcelerVersion)
 
     testingDependencies = [junit      : buildDependency(junitPackage, 'junit', junitVersion),
                            mockito    : buildDependency(mockitoPackage, 'mockito-core', mockitoVersion),
                            robolectric: buildDependency(robolectricPackage, 'robolectric', robolectricVersion),
-                           espresso : buildDependency(espressoPackage, 'espresso-core', espressoVersion)]
+                           espresso   : buildDependency(espressoPackage, 'espresso-core', espressoVersion)]
 }
 
 String buildDependency(String pack, String dependency, String version) {

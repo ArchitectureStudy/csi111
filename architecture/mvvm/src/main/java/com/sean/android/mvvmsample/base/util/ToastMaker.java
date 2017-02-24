@@ -22,13 +22,13 @@ public class ToastMaker {
     }
 
     public static void makeLongToast(Context context, String text) {
-        if (context != null && text != null && text.isEmpty()) {
+        if (context != null && text != null && !text.isEmpty()) {
             Toast.makeText(context, text, Toast.LENGTH_LONG).show();
         }
     }
 
     public static void makeShortToast(Context context, String text) {
-        if (context != null && text != null && text.isEmpty()) {
+        if (context != null && text != null && !text.isEmpty()) {
             Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
         }
     }

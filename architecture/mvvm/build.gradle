@@ -39,6 +39,7 @@ dependencies {
     compile butterknife
     annotationProcessor butterknifeProcesser
     compile rxDependencies.rxAndroid
+    compile rxDependencies.rxBinding
     compile parceler
     apt parcelerApt
     testCompile testingDependencies.junit
