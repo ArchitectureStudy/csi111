@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.sean.android.mvvmsample.R;
 import com.sean.android.mvvmsample.data.comment.Comment;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,8 +25,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
     private List<Comment> mComments;
 
-    public CommentsAdapter(List<Comment> comments) {
-        setList(comments);
+    public CommentsAdapter() {
+        setList(Collections.<Comment>emptyList());
     }
 
     @Override

@@ -3,14 +3,13 @@ package com.sean.android.mvvmsample.ui.issues;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.sean.android.mvvmsample.R;
-import com.sean.android.mvvmsample.data.issue.Issue;
 import com.sean.android.mvvmsample.databinding.LayoutIssueItemBinding;
 import com.sean.android.mvvmsample.ui.issues.viewmodel.IssueItemViewModel;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -22,11 +21,9 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class IssuesAdapter extends RecyclerView.Adapter<IssuesAdapter.IssuesViewHolder> {
 
     private List<IssueItemViewModel> mIssues;
-    private IssueItemListener mIssueItemListener;
 
-    public IssuesAdapter(List<IssueItemViewModel> issues, IssueItemListener issueItemListener) {
-        setList(issues);
-        mIssueItemListener = issueItemListener;
+    public IssuesAdapter() {
+        setList(Collections.<IssueItemViewModel>emptyList());
     }
 
     @Override
@@ -66,9 +63,5 @@ public class IssuesAdapter extends RecyclerView.Adapter<IssuesAdapter.IssuesView
         void bind(IssueItemViewModel viewModel) {
             layoutIssueItemBinding.setItemViewModel(viewModel);
         }
-    }
-
-    public interface IssueItemListener {
-        void onIssueClick(Issue issue);
     }
 }
