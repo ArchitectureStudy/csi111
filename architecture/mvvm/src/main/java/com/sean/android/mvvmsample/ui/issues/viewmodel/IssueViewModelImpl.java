@@ -23,12 +23,9 @@ public class IssueViewModelImpl implements IssueViewModel {
 
     private Context mContext;
 
-
     private PublishSubject<Issues> mPublishIssuesSubject;
 
     private Observable<List<IssueItemViewModel>> mIssuesObservable;
-
-    private Issues mIssues;
 
     public IssueViewModelImpl(Context mContext) {
         this.mContext = mContext;
@@ -48,6 +45,7 @@ public class IssueViewModelImpl implements IssueViewModel {
 
     @Override
     public void refreshIssues() {
+        fetchIssues();
     }
 
     @Override
@@ -62,6 +60,7 @@ public class IssueViewModelImpl implements IssueViewModel {
             @Override
             public void onIssuesFailed(int code, String message) {
                 ToastMaker.makeShortToast(mContext, message);
+                mPublishIssuesSubject.onNext(null);
             }
         });
 

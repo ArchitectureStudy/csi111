@@ -20,7 +20,7 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
     private int mIssueNumber;
     private String mTitleText = "";
     private String mContentsText = "";
-    private BindableString commentsText = new BindableString();
+    private BindableString mCommentsText = new BindableString();
 
     private List<CommentCommander> mCommanders = new ArrayList<>();
 
@@ -39,8 +39,8 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
         mIssueNumber = in.readInt();
         mTitleText = in.readString();
         mContentsText = in.readString();
-        commentsText = new BindableString();
-        commentsText.set(in.readString());
+        mCommentsText = new BindableString();
+        mCommentsText.set(in.readString());
 
     }
 
@@ -68,7 +68,7 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
 
     @Override
     public BindableString getCommentText() {
-        return commentsText;
+        return mCommentsText;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
 
     @Override
     public void onClickSendComment(View view) {
-        CommentsRepository.getInstance().createComment(mIssueNumber, commentsText.get(), new CommentsDataSource.PostCommentCallback() {
+        CommentsRepository.getInstance().createComment(mIssueNumber, mCommentsText.get(), new CommentsDataSource.PostCommentCallback() {
             @Override
             public void onCommentPosted(Comment comment) {
                 commandRefreshAll();
@@ -91,14 +91,6 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
         });
     }
 
-    public void setTitleText(String titleText) {
-        this.mTitleText = titleText;
-    }
-
-    public void setContentsText(String contentsText) {
-        this.mContentsText = contentsText;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -109,7 +101,7 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
         parcel.writeInt(mIssueNumber);
         parcel.writeString(mTitleText);
         parcel.writeString(mContentsText);
-        parcel.writeString(commentsText.get());
+        parcel.writeString(mCommentsText.get());
     }
 
     private void commandRefreshAll() {

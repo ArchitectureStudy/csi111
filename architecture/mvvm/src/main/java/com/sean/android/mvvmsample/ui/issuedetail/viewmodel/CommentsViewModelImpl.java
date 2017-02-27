@@ -21,7 +21,7 @@ import rx.subjects.PublishSubject;
 
 public class CommentsViewModelImpl implements CommentsViewModel, CommentCommander {
 
-    private int issueNumber;
+    private int mIssueNumber;
 
     private Context mContext;
 
@@ -31,14 +31,14 @@ public class CommentsViewModelImpl implements CommentsViewModel, CommentCommande
 
     public CommentsViewModelImpl(Context context, int issueNumber) {
         this.mContext = context;
-        this.issueNumber = issueNumber;
+        this.mIssueNumber = issueNumber;
         mPublishCommentsSubject = PublishSubject.create();
 
 
         mCommentsObservable = mPublishCommentsSubject.onBackpressureLatest().map(new Func1<Comments, List<CommentItemViewModel>>() {
             @Override
             public List<CommentItemViewModel> call(Comments comments) {
-                List<CommentItemViewModel> itemVMList = new ArrayList<CommentItemViewModel>();
+                List<CommentItemViewModel> itemVMList = new ArrayList<>();
                 for (Comment comment : comments.getModels()) {
                     itemVMList.add(new CommentItemViewModelImpl(comment));
                 }
@@ -55,7 +55,7 @@ public class CommentsViewModelImpl implements CommentsViewModel, CommentCommande
 
     @Override
     public void fetchComments() {
-        CommentsRepository.getInstance().getComments(issueNumber, new CommentsDataSource.LoadCommentsCallback() {
+        CommentsRepository.getInstance().getComments(mIssueNumber, new CommentsDataSource.LoadCommentsCallback() {
             @Override
             public void onCommentsLoaded(Comments comments) {
                 mPublishCommentsSubject.onNext(comments);

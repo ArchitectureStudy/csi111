@@ -81,6 +81,12 @@ public class IssueDetailFragment extends Fragment {
         super.onResume();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        subscription.unsubscribe();
+    }
+
     private void subscribe() {
         if (commentsViewModel != null) {
             subscription = commentsViewModel.observComments().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CommentItemViewModel>>() {

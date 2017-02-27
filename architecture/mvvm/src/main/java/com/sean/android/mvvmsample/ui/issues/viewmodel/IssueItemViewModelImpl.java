@@ -15,28 +15,29 @@ import static com.sean.android.mvvmsample.ui.issuedetail.IssueDetailActivity.EXT
  */
 
 public class IssueItemViewModelImpl implements IssueItemViewModel {
-    Issue issue;
+
+    private Issue mIssue;
 
     public IssueItemViewModelImpl(Issue issue) {
-        this.issue = issue;
+        this.mIssue = issue;
     }
 
     @Override
     public String getTitleText() {
-        return issue.getTitle();
+        return mIssue.getTitle();
     }
 
     @Override
     public String getIssueIdText() {
-        return String.valueOf(issue.getId());
+        return String.valueOf(mIssue.getId());
     }
 
     @Override
     public void onItemClick(View view) {
         Intent intent = new Intent(view.getContext(), IssueDetailActivity.class);
-        intent.putExtra(EXTRA_ISSUE_NUMBER, issue.getNumber());
-        intent.putExtra(EXTRA_ISSUE_TITLE, issue.getTitle());
-        intent.putExtra(EXTRA_ISSUE_BODY, issue.getBody());
+        intent.putExtra(EXTRA_ISSUE_NUMBER, mIssue.getNumber());
+        intent.putExtra(EXTRA_ISSUE_TITLE, mIssue.getTitle());
+        intent.putExtra(EXTRA_ISSUE_BODY, mIssue.getBody());
         view.getContext().startActivity(intent);
     }
 }
