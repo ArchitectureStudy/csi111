@@ -9,7 +9,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.sean.android.mvvmsample.R;
-import com.sean.android.mvvmsample.base.viewmodel.ViewModel;
 
 /**
  * Created by Seonil on 2017-02-17.
@@ -43,9 +42,12 @@ public class Converter {
             view.setTag(R.id.bound_observable, new Pair<>(bindableString, watcher));
             view.addTextChangedListener(watcher);
         }
-        String newValue = bindableString.get();
-        if (!view.getText().toString().equals(newValue)) {
-            view.setText(newValue);
+
+        if (bindableString != null) {
+            String newValue = bindableString.get();
+            if (!view.getText().toString().equals(newValue)) {
+                view.setText(newValue);
+            }
         }
     }
 
