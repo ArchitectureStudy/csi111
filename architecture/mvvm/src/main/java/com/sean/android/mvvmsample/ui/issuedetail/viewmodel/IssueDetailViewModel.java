@@ -21,5 +21,5 @@ public interface IssueDetailViewModel extends Parcelable {
 
     void onClickSendComment(View view);
 
-    void setCommander(Commander commander);
+    void setCommander(CommentCommander commander);
 }

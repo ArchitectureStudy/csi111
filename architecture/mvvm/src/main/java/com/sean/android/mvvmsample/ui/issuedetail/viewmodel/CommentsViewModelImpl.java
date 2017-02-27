@@ -19,7 +19,7 @@ import rx.subjects.PublishSubject;
  * Created by Seonil on 2017-02-27.
  */
 
-public class CommentsViewModelImpl implements CommentsViewModel, Commander {
+public class CommentsViewModelImpl implements CommentsViewModel, CommentCommander {
 
     private int issueNumber;
 
@@ -81,5 +81,10 @@ public class CommentsViewModelImpl implements CommentsViewModel, Commander {
     @Override
     public void refresh() {
         refreshComments();
+    }
+
+    @Override
+    public void noticeMessage(String message) {
+        ToastMaker.makeShortToast(mContext, message);
     }
 }

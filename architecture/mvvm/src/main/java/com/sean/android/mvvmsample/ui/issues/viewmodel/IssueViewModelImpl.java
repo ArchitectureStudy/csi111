@@ -1,7 +1,6 @@
 package com.sean.android.mvvmsample.ui.issues.viewmodel;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.sean.android.mvvmsample.base.util.ToastMaker;
 import com.sean.android.mvvmsample.data.issue.Issue;
@@ -20,7 +19,7 @@ import rx.subjects.PublishSubject;
  * Created by Seonil on 2017-02-23.
  */
 
-public class IssuesViewModelImpl implements IssuesViewModel {
+public class IssueViewModelImpl implements IssueViewModel {
 
     private Context mContext;
 
@@ -31,7 +30,7 @@ public class IssuesViewModelImpl implements IssuesViewModel {
 
     private Issues mIssues;
 
-    public IssuesViewModelImpl(Context mContext) {
+    public IssueViewModelImpl(Context mContext) {
         this.mContext = mContext;
         mPublishIssuesSubject = PublishSubject.create();
         mIssuesObservable = mPublishIssuesSubject.onBackpressureLatest().map(new Func1<Issues, List<IssueItemViewModel>>() {

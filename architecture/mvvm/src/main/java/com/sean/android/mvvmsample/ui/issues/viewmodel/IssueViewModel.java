@@ -8,7 +8,7 @@ import rx.Observable;
  * Created by Seonil on 2017-02-17.
  */
 
-public interface IssuesViewModel {
+public interface IssueViewModel {
     void refreshIssues();
 
     void fetchIssues();

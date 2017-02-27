@@ -1,6 +1,5 @@
 package com.sean.android.mvvmsample.ui.issuedetail.viewmodel;
 
-import android.util.Log;
 import android.view.View;
 
 import com.sean.android.mvvmsample.base.databinding.BindableString;
@@ -8,6 +7,9 @@ import com.sean.android.mvvmsample.data.comment.Comment;
 import com.sean.android.mvvmsample.data.comment.CommentsDataSource;
 import com.sean.android.mvvmsample.data.comment.CommentsRepository;
 import com.sean.android.mvvmsample.data.issue.Issue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Seonil on 2017-02-27.
@@ -20,15 +22,17 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
     private String mContentsText = "";
     private BindableString commentsText = new BindableString();
 
-    private Commander commander;
+    private List<CommentCommander> mCommanders = new ArrayList<>();
 
     public IssueDetailViewModelImpl() {
     }
 
     public IssueDetailViewModelImpl(Issue issue) {
-        mTitleText = issue.getTitle();
-        mContentsText = issue.getBody();
-        mIssueNumber = issue.getNumber();
+        if (issue != null) {
+            mTitleText = issue.getTitle();
+            mContentsText = issue.getBody();
+            mIssueNumber = issue.getNumber();
+        }
     }
 
     protected IssueDetailViewModelImpl(android.os.Parcel in) {
@@ -77,12 +81,12 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
         CommentsRepository.getInstance().createComment(mIssueNumber, commentsText.get(), new CommentsDataSource.PostCommentCallback() {
             @Override
             public void onCommentPosted(Comment comment) {
-                commander.refresh();
+                commandRefreshAll();
             }
 
             @Override
             public void onCommentPostFailed(int code, String message) {
-                Log.d("TEST", "code = [" + code + "] message = [" + message + "]");
+                commandNoticeAll(message);
             }
         });
     }
@@ -108,8 +112,25 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
         parcel.writeString(commentsText.get());
     }
 
+    private void commandRefreshAll() {
+        if (mCommanders != null && mCommanders.size() > 0) {
+            for (CommentCommander commander : mCommanders) {
+                commander.refresh();
+            }
+        }
+    }
+
+    private void commandNoticeAll(String message) {
+        if (mCommanders != null && mCommanders.size() > 0) {
+            for (CommentCommander commander : mCommanders) {
+                commander.noticeMessage(message);
+            }
+        }
+    }
+
+
     @Override
-    public void setCommander(Commander commander) {
-        this.commander = commander;
+    public void setCommander(CommentCommander commander) {
+        this.mCommanders.add(commander);
     }
 }

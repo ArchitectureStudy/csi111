@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import com.sean.android.mvvmsample.R;
 import com.sean.android.mvvmsample.databinding.FragmentIssuesBinding;
 import com.sean.android.mvvmsample.ui.issues.viewmodel.IssueItemViewModel;
-import com.sean.android.mvvmsample.ui.issues.viewmodel.IssuesViewModel;
-import com.sean.android.mvvmsample.ui.issues.viewmodel.IssuesViewModelImpl;
+import com.sean.android.mvvmsample.ui.issues.viewmodel.IssueViewModel;
+import com.sean.android.mvvmsample.ui.issues.viewmodel.IssueViewModelImpl;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class IssuesFragment extends Fragment {
 
     private FragmentIssuesBinding fragmentIssuesBinding;
 
-    private IssuesViewModel issuesViewModel;
+    private IssueViewModel issuesViewModel;
 
     private Subscription subscription;
 
@@ -50,7 +50,7 @@ public class IssuesFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        issuesViewModel = new IssuesViewModelImpl(activity);
+        issuesViewModel = new IssueViewModelImpl(activity);
         subscribe();
     }
 

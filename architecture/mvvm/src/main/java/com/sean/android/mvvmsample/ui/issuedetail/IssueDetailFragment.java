@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.sean.android.mvvmsample.R;
 import com.sean.android.mvvmsample.databinding.FragmentIssueDetailBinding;
-import com.sean.android.mvvmsample.ui.issuedetail.viewmodel.Commander;
+import com.sean.android.mvvmsample.ui.issuedetail.viewmodel.CommentCommander;
 import com.sean.android.mvvmsample.ui.issuedetail.viewmodel.CommentItemViewModel;
 import com.sean.android.mvvmsample.ui.issuedetail.viewmodel.CommentsViewModel;
 import com.sean.android.mvvmsample.ui.issuedetail.viewmodel.CommentsViewModelImpl;
@@ -35,7 +35,7 @@ public class IssueDetailFragment extends Fragment {
 
     private CommentsViewModel commentsViewModel;
 
-    private Commander commander;
+    private CommentCommander commander;
 
     private Subscription subscription;
 
@@ -52,7 +52,7 @@ public class IssueDetailFragment extends Fragment {
             commentsViewModel = new CommentsViewModelImpl(getActivity(), issueDetailViewModel.getIssueNumber());
             subscribe();
             commentsViewModel.fetchComments();
-            issueDetailViewModel.setCommander((Commander) commentsViewModel);
+            issueDetailViewModel.setCommander((CommentCommander) commentsViewModel);
         }
     }
 
