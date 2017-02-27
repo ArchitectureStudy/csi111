@@ -19,7 +19,7 @@ import rx.subjects.PublishSubject;
  * Created by Seonil on 2017-02-27.
  */
 
-public class CommentsViewModelImpl implements CommentsViewModel {
+public class CommentsViewModelImpl implements CommentsViewModel, Commander {
 
     private int issueNumber;
 
@@ -50,7 +50,7 @@ public class CommentsViewModelImpl implements CommentsViewModel {
 
     @Override
     public void refreshComments() {
-
+        fetchComments();
     }
 
     @Override
@@ -76,5 +76,10 @@ public class CommentsViewModelImpl implements CommentsViewModel {
     @Override
     public Observable<List<CommentItemViewModel>> observComments() {
         return mCommentsObservable;
+    }
+
+    @Override
+    public void refresh() {
+        refreshComments();
     }
 }

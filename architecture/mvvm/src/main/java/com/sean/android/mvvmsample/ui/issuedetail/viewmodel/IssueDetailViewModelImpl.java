@@ -1,8 +1,12 @@
 package com.sean.android.mvvmsample.ui.issuedetail.viewmodel;
 
+import android.util.Log;
 import android.view.View;
 
 import com.sean.android.mvvmsample.base.databinding.BindableString;
+import com.sean.android.mvvmsample.data.comment.Comment;
+import com.sean.android.mvvmsample.data.comment.CommentsDataSource;
+import com.sean.android.mvvmsample.data.comment.CommentsRepository;
 import com.sean.android.mvvmsample.data.issue.Issue;
 
 /**
@@ -10,10 +14,13 @@ import com.sean.android.mvvmsample.data.issue.Issue;
  */
 
 public class IssueDetailViewModelImpl implements IssueDetailViewModel {
+
     private int mIssueNumber;
     private String mTitleText = "";
     private String mContentsText = "";
     private BindableString commentsText = new BindableString();
+
+    private Commander commander;
 
     public IssueDetailViewModelImpl() {
     }
@@ -67,7 +74,17 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
 
     @Override
     public void onClickSendComment(View view) {
+        CommentsRepository.getInstance().createComment(mIssueNumber, commentsText.get(), new CommentsDataSource.PostCommentCallback() {
+            @Override
+            public void onCommentPosted(Comment comment) {
+                commander.refresh();
+            }
 
+            @Override
+            public void onCommentPostFailed(int code, String message) {
+                Log.d("TEST", "code = [" + code + "] message = [" + message + "]");
+            }
+        });
     }
 
     public void setTitleText(String titleText) {
@@ -89,5 +106,10 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
         parcel.writeString(mTitleText);
         parcel.writeString(mContentsText);
         parcel.writeString(commentsText.get());
+    }
+
+    @Override
+    public void setCommander(Commander commander) {
+        this.commander = commander;
     }
 }

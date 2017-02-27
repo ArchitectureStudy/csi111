@@ -20,4 +20,6 @@ public interface IssueDetailViewModel extends Parcelable {
     int getIssueNumber();
 
     void onClickSendComment(View view);
+
+    void setCommander(Commander commander);
 }
