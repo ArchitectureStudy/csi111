@@ -13,16 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sean.android.mvvmsample.R;
+import com.sean.android.mvvmsample.base.command.ToastNotifyCommand;
+import com.sean.android.mvvmsample.base.viewmodel.NotifyUpdateViewModelListener;
 import com.sean.android.mvvmsample.databinding.FragmentIssuesBinding;
 import com.sean.android.mvvmsample.ui.issues.viewmodel.IssueItemViewModel;
 import com.sean.android.mvvmsample.ui.issues.viewmodel.IssueViewModel;
 import com.sean.android.mvvmsample.ui.issues.viewmodel.IssueViewModelImpl;
 
 import java.util.List;
-
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by Seonil on 2017-01-16.
@@ -35,8 +33,6 @@ public class IssuesFragment extends Fragment {
     private FragmentIssuesBinding fragmentIssuesBinding;
 
     private IssueViewModel issuesViewModel;
-
-    private Subscription subscription;
 
     public static IssuesFragment newInstance() {
         return new IssuesFragment();
@@ -51,29 +47,23 @@ public class IssuesFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        issuesViewModel = new IssueViewModelImpl(activity);
-        subscribe();
     }
-
-    private void subscribe() {
-        if (issuesViewModel != null) {
-            subscription = issuesViewModel.observIssues().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<IssueItemViewModel>>() {
-                @Override
-                public void call(List<IssueItemViewModel> issueItemViewModels) {
-                    mIssuesAdapter.replaceData(issueItemViewModels);
-                    if (fragmentIssuesBinding.scrollChildSwipeRefreshLayout.isRefreshing()) {
-                        fragmentIssuesBinding.scrollChildSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }
-            });
-        }
-    }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIssuesAdapter = new IssuesAdapter();
+        issuesViewModel = new IssueViewModelImpl();
+        issuesViewModel.setNotifyCommand(new ToastNotifyCommand(getActivity()));
+        issuesViewModel.setUpdateViewModelListener(new NotifyUpdateViewModelListener<List<IssueItemViewModel>>() {
+            @Override
+            public void onUpdatedViewModel(List<IssueItemViewModel> viewModel) {
+                mIssuesAdapter.replaceData(viewModel);
+                if (fragmentIssuesBinding.scrollChildSwipeRefreshLayout.isRefreshing()) {
+                    fragmentIssuesBinding.scrollChildSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
     }
 
     @Nullable
@@ -106,6 +96,5 @@ public class IssuesFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        subscription.unsubscribe();
     }
 }

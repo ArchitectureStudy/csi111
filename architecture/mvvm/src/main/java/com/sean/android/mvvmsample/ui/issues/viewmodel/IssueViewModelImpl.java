@@ -1,8 +1,7 @@
 package com.sean.android.mvvmsample.ui.issues.viewmodel;
 
-import android.content.Context;
-
-import com.sean.android.mvvmsample.base.util.ToastMaker;
+import com.sean.android.mvvmsample.base.command.MessageNotifyCommand;
+import com.sean.android.mvvmsample.base.viewmodel.NotifyUpdateViewModelListener;
 import com.sean.android.mvvmsample.data.issue.Issue;
 import com.sean.android.mvvmsample.data.issue.Issues;
 import com.sean.android.mvvmsample.data.issue.IssuesDataSource;
@@ -11,36 +10,17 @@ import com.sean.android.mvvmsample.data.issue.IssuesRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
-
 /**
  * Created by Seonil on 2017-02-23.
  */
-
 public class IssueViewModelImpl implements IssueViewModel {
 
-    private Context mContext;
+    private MessageNotifyCommand mMessageNotifyCommand;
 
-    private PublishSubject<Issues> mPublishIssuesSubject;
+    private NotifyUpdateViewModelListener notifyUpdateViewModelListener;
 
-    private Observable<List<IssueItemViewModel>> mIssuesObservable;
 
-    public IssueViewModelImpl(Context mContext) {
-        this.mContext = mContext;
-        mPublishIssuesSubject = PublishSubject.create();
-        mIssuesObservable = mPublishIssuesSubject.onBackpressureLatest().map(new Func1<Issues, List<IssueItemViewModel>>() {
-            @Override
-            public List<IssueItemViewModel> call(Issues issues) {
-                List<IssueItemViewModel> itemVMList = new ArrayList<IssueItemViewModel>();
-                for (Issue issue : issues.getModels()) {
-                    itemVMList.add(new IssueItemViewModelImpl(issue));
-                }
-                return itemVMList;
-            }
-        });
-
+    public IssueViewModelImpl() {
     }
 
     @Override
@@ -53,26 +33,32 @@ public class IssueViewModelImpl implements IssueViewModel {
         IssuesRepository.getInstance().fetchIssues(new IssuesDataSource.LoadIssuesCallback() {
             @Override
             public void onIssuesLoaded(Issues issues) {
-                mPublishIssuesSubject.onNext(issues);
-
+                List<IssueItemViewModel> itemVMList = new ArrayList<IssueItemViewModel>();
+                for (Issue issue : issues.getModels()) {
+                    itemVMList.add(new IssueItemViewModelImpl(issue));
+                }
+                if (notifyUpdateViewModelListener != null) {
+                    notifyUpdateViewModelListener.onUpdatedViewModel(itemVMList);
+                }
             }
 
             @Override
             public void onIssuesFailed(int code, String message) {
-                ToastMaker.makeShortToast(mContext, message);
-                mPublishIssuesSubject.onNext(null);
+                if (mMessageNotifyCommand != null) {
+                    mMessageNotifyCommand.execute(message);
+                }
             }
         });
 
     }
 
     @Override
-    public boolean showIndicator() {
-        return false;
+    public void setNotifyCommand(MessageNotifyCommand messageNotifyCommand) {
+        mMessageNotifyCommand = messageNotifyCommand;
     }
 
     @Override
-    public Observable observIssues() {
-        return mIssuesObservable;
+    public void setUpdateViewModelListener(NotifyUpdateViewModelListener listener) {
+        notifyUpdateViewModelListener = listener;
     }
 }

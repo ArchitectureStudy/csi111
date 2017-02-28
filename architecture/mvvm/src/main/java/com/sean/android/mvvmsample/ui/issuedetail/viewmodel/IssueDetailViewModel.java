@@ -3,6 +3,7 @@ package com.sean.android.mvvmsample.ui.issuedetail.viewmodel;
 import android.os.Parcelable;
 import android.view.View;
 
+import com.sean.android.mvvmsample.base.command.MessageNotifyCommand;
 import com.sean.android.mvvmsample.base.databinding.BindableString;
 
 /**
@@ -22,4 +23,6 @@ public interface IssueDetailViewModel extends Parcelable {
     void onClickSendComment(View view);
 
     void setCommander(CommentCommander commander);
+
+    void setNotifyCommand(MessageNotifyCommand messageNotifyCommand);
 }

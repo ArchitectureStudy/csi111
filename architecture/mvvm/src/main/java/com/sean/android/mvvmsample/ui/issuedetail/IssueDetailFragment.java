@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sean.android.mvvmsample.R;
+import com.sean.android.mvvmsample.base.command.ToastNotifyCommand;
+import com.sean.android.mvvmsample.base.viewmodel.NotifyUpdateViewModelListener;
 import com.sean.android.mvvmsample.databinding.FragmentIssueDetailBinding;
 import com.sean.android.mvvmsample.ui.issuedetail.viewmodel.CommentCommander;
 import com.sean.android.mvvmsample.ui.issuedetail.viewmodel.CommentItemViewModel;
@@ -18,10 +20,6 @@ import com.sean.android.mvvmsample.ui.issuedetail.viewmodel.CommentsViewModelImp
 import com.sean.android.mvvmsample.ui.issuedetail.viewmodel.IssueDetailViewModel;
 
 import java.util.List;
-
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by Seonil on 2017-01-20.
@@ -35,10 +33,6 @@ public class IssueDetailFragment extends Fragment {
 
     private CommentsViewModel commentsViewModel;
 
-    private CommentCommander commander;
-
-    private Subscription subscription;
-
     public static IssueDetailFragment newInstance() {
         return new IssueDetailFragment();
     }
@@ -48,12 +42,8 @@ public class IssueDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mCommentsAdapter = new CommentsAdapter();
         issueDetailViewModel = getArguments().getParcelable(IssueDetailViewModel.class.getName());
-        if (issueDetailViewModel != null) {
-            commentsViewModel = new CommentsViewModelImpl(getActivity(), issueDetailViewModel.getIssueNumber());
-            subscribe();
-            commentsViewModel.fetchComments();
-            issueDetailViewModel.setCommander((CommentCommander) commentsViewModel);
-        }
+        issueDetailViewModel.setNotifyCommand(new ToastNotifyCommand(getActivity()));
+        initializeIssueViewModel();
     }
 
     @Nullable
@@ -84,17 +74,19 @@ public class IssueDetailFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        subscription.unsubscribe();
     }
 
-    private void subscribe() {
-        if (commentsViewModel != null) {
-            subscription = commentsViewModel.observComments().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<CommentItemViewModel>>() {
+    private void initializeIssueViewModel() {
+        if (issueDetailViewModel != null) {
+            commentsViewModel = new CommentsViewModelImpl(issueDetailViewModel.getIssueNumber());
+            commentsViewModel.setUpdateViewModelListener(new NotifyUpdateViewModelListener<List<CommentItemViewModel>>() {
                 @Override
-                public void call(List<CommentItemViewModel> commentItemViewModels) {
-                    mCommentsAdapter.replaceData(commentItemViewModels);
+                public void onUpdatedViewModel(List<CommentItemViewModel> viewModel) {
+                    mCommentsAdapter.replaceData(viewModel);
                 }
             });
+            issueDetailViewModel.setCommander((CommentCommander) commentsViewModel);
+            commentsViewModel.fetchComments();
         }
     }
 }

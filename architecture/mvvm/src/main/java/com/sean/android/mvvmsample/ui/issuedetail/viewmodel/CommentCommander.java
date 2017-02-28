@@ -6,7 +6,4 @@ package com.sean.android.mvvmsample.ui.issuedetail.viewmodel;
 
 public interface CommentCommander {
     void refresh();
-
-    void noticeMessage(String message);
-
 }

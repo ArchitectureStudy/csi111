@@ -1,8 +1,6 @@
 package com.sean.android.mvvmsample.ui.issuedetail.viewmodel;
 
-import android.content.Context;
-
-import com.sean.android.mvvmsample.base.util.ToastMaker;
+import com.sean.android.mvvmsample.base.viewmodel.NotifyUpdateViewModelListener;
 import com.sean.android.mvvmsample.data.comment.Comment;
 import com.sean.android.mvvmsample.data.comment.Comments;
 import com.sean.android.mvvmsample.data.comment.CommentsDataSource;
@@ -23,14 +21,14 @@ public class CommentsViewModelImpl implements CommentsViewModel, CommentCommande
 
     private int mIssueNumber;
 
-    private Context mContext;
 
     private PublishSubject<Comments> mPublishCommentsSubject;
 
     private Observable<List<CommentItemViewModel>> mCommentsObservable;
 
-    public CommentsViewModelImpl(Context context, int issueNumber) {
-        this.mContext = context;
+    private NotifyUpdateViewModelListener notifyUpdateViewModelListener;
+
+    public CommentsViewModelImpl(int issueNumber) {
         this.mIssueNumber = issueNumber;
         mPublishCommentsSubject = PublishSubject.create();
 
@@ -58,12 +56,18 @@ public class CommentsViewModelImpl implements CommentsViewModel, CommentCommande
         CommentsRepository.getInstance().getComments(mIssueNumber, new CommentsDataSource.LoadCommentsCallback() {
             @Override
             public void onCommentsLoaded(Comments comments) {
-                mPublishCommentsSubject.onNext(comments);
+                List<CommentItemViewModel> itemVMList = new ArrayList<>();
+                for (Comment comment : comments.getModels()) {
+                    itemVMList.add(new CommentItemViewModelImpl(comment));
+                }
+
+                if (notifyUpdateViewModelListener != null) {
+                    notifyUpdateViewModelListener.onUpdatedViewModel(itemVMList);
+                }
             }
 
             @Override
             public void onCommentsFailed(int code, String message) {
-                ToastMaker.makeShortToast(mContext, message);
             }
         });
     }
@@ -74,8 +78,8 @@ public class CommentsViewModelImpl implements CommentsViewModel, CommentCommande
     }
 
     @Override
-    public Observable<List<CommentItemViewModel>> observComments() {
-        return mCommentsObservable;
+    public void setUpdateViewModelListener(NotifyUpdateViewModelListener listener) {
+        notifyUpdateViewModelListener = listener;
     }
 
     @Override
@@ -83,8 +87,5 @@ public class CommentsViewModelImpl implements CommentsViewModel, CommentCommande
         refreshComments();
     }
 
-    @Override
-    public void noticeMessage(String message) {
-        ToastMaker.makeShortToast(mContext, message);
-    }
+
 }

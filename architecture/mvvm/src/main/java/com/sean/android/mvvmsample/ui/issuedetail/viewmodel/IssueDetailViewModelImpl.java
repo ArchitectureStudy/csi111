@@ -2,6 +2,7 @@ package com.sean.android.mvvmsample.ui.issuedetail.viewmodel;
 
 import android.view.View;
 
+import com.sean.android.mvvmsample.base.command.MessageNotifyCommand;
 import com.sean.android.mvvmsample.base.databinding.BindableString;
 import com.sean.android.mvvmsample.data.comment.Comment;
 import com.sean.android.mvvmsample.data.comment.CommentsDataSource;
@@ -23,6 +24,8 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
     private BindableString mCommentsText = new BindableString();
 
     private List<CommentCommander> mCommanders = new ArrayList<>();
+
+    private MessageNotifyCommand mNotifyCommand;
 
     public IssueDetailViewModelImpl() {
     }
@@ -86,7 +89,9 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
 
             @Override
             public void onCommentPostFailed(int code, String message) {
-                commandNoticeAll(message);
+                if (mNotifyCommand != null) {
+                    mNotifyCommand.execute(message);
+                }
             }
         });
     }
@@ -112,17 +117,13 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
         }
     }
 
-    private void commandNoticeAll(String message) {
-        if (mCommanders != null && mCommanders.size() > 0) {
-            for (CommentCommander commander : mCommanders) {
-                commander.noticeMessage(message);
-            }
-        }
-    }
-
-
     @Override
     public void setCommander(CommentCommander commander) {
         this.mCommanders.add(commander);
+    }
+
+    @Override
+    public void setNotifyCommand(MessageNotifyCommand messageNotifyCommand) {
+        mNotifyCommand = messageNotifyCommand;
     }
 }

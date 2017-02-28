@@ -1,8 +1,6 @@
 package com.sean.android.mvvmsample.ui.issuedetail.viewmodel;
 
-import java.util.List;
-
-import rx.Observable;
+import com.sean.android.mvvmsample.base.viewmodel.NotifyUpdateViewModelListener;
 
 /**
  * Created by Seonil on 2017-02-24.
@@ -15,6 +13,6 @@ public interface CommentsViewModel {
 
     boolean showIndicator();
 
-    Observable<List<CommentItemViewModel>> observComments();
+    void setUpdateViewModelListener(NotifyUpdateViewModelListener listener);
 
 }

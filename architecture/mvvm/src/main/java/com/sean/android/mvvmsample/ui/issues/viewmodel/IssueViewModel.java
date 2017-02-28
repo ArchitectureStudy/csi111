@@ -1,5 +1,8 @@
 package com.sean.android.mvvmsample.ui.issues.viewmodel;
 
+import com.sean.android.mvvmsample.base.command.MessageNotifyCommand;
+import com.sean.android.mvvmsample.base.viewmodel.NotifyUpdateViewModelListener;
+
 import java.util.List;
 
 import rx.Observable;
@@ -13,7 +16,7 @@ public interface IssueViewModel {
 
     void fetchIssues();
 
-    boolean showIndicator();
+    void setNotifyCommand(MessageNotifyCommand messageNotifyCommand);
 
-    Observable<List<IssueItemViewModel>> observIssues();
+    void setUpdateViewModelListener(NotifyUpdateViewModelListener listener);
 }
