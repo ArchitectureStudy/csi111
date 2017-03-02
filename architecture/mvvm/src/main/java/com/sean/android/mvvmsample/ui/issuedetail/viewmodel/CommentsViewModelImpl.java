@@ -9,10 +9,6 @@ import com.sean.android.mvvmsample.data.comment.CommentsRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
-
 /**
  * Created by Seonil on 2017-02-27.
  */
@@ -20,30 +16,10 @@ import rx.subjects.PublishSubject;
 public class CommentsViewModelImpl implements CommentsViewModel, CommentCommander {
 
     private int mIssueNumber;
-
-
-    private PublishSubject<Comments> mPublishCommentsSubject;
-
-    private Observable<List<CommentItemViewModel>> mCommentsObservable;
-
     private NotifyUpdateViewModelListener notifyUpdateViewModelListener;
 
     public CommentsViewModelImpl(int issueNumber) {
         this.mIssueNumber = issueNumber;
-        mPublishCommentsSubject = PublishSubject.create();
-
-
-        mCommentsObservable = mPublishCommentsSubject.onBackpressureLatest().map(new Func1<Comments, List<CommentItemViewModel>>() {
-            @Override
-            public List<CommentItemViewModel> call(Comments comments) {
-                List<CommentItemViewModel> itemVMList = new ArrayList<>();
-                for (Comment comment : comments.getModels()) {
-                    itemVMList.add(new CommentItemViewModelImpl(comment));
-                }
-                return itemVMList;
-            }
-        });
-
     }
 
     @Override

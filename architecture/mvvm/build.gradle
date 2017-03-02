@@ -36,8 +36,6 @@ dependencies {
     compile supportDependencies.cardView
     compile supportDependencies.recyclerView
     compile supportDependencies.design
-    compile butterknife
-    annotationProcessor butterknifeProcesser
     compile rxDependencies.rxAndroid
     compile rxDependencies.rxBinding
     compile parceler
