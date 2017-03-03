@@ -1,1 +1,1 @@
-include ':mvp', ':githubAPI', ':mvvm'
+include ':mvp', ':githubAPI', ':mvvm', ':viper'
