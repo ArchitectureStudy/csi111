@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.sean.android.mvcsample"
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+        encoding = 'UTF-8'
+    }
+
+    dexOptions {
+        jumboMode true
+        javaMaxHeapSize "4g"
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile(testingDependencies.espresso, {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile supportDependencies.appCompat
+    compile supportDependencies.cardView
+    compile supportDependencies.recyclerView
+    compile supportDependencies.design
+    compile butterknife
+    annotationProcessor butterknifeProcesser
+    testCompile testingDependencies.junit
+    compile project(':githubAPI')
+}
