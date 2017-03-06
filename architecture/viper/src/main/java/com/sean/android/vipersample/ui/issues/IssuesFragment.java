@@ -7,32 +7,29 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sean.android.vipersample.R;
-import com.sean.android.vipersample.base.command.ToastNotifyCommand;
-import com.sean.android.vipersample.base.viewmodel.NotifyUpdateViewModelListener;
+import com.sean.android.vipersample.base.util.ToastMaker;
 import com.sean.android.vipersample.databinding.FragmentIssuesBinding;
+import com.sean.android.vipersample.ui.issues.presenter.IssuesPresenter;
+import com.sean.android.vipersample.ui.issues.presenter.IssuesPresenterBinder;
 import com.sean.android.vipersample.ui.issues.viewmodel.IssueItemViewModel;
-import com.sean.android.vipersample.ui.issues.viewmodel.IssueViewModel;
-import com.sean.android.vipersample.ui.issues.viewmodel.IssueViewModelImpl;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by Seonil on 2017-01-16.
  */
 
-public class IssuesFragment extends Fragment {
+public class IssuesFragment extends Fragment implements IssuesViewCallbacks, IssuesPresenterBinder {
 
     private IssuesAdapter mIssuesAdapter;
 
     private FragmentIssuesBinding fragmentIssuesBinding;
-
-    private IssueViewModel issuesViewModel;
 
     public static IssuesFragment newInstance() {
         return new IssuesFragment();
@@ -52,18 +49,6 @@ public class IssuesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mIssuesAdapter = new IssuesAdapter();
-        issuesViewModel = new IssueViewModelImpl();
-        issuesViewModel.setNotifyCommand(new ToastNotifyCommand(getActivity()));
-        issuesViewModel.setUpdateViewModelListener(new NotifyUpdateViewModelListener<List<IssueItemViewModel>>() {
-            @Override
-            public void onUpdatedViewModel(List<IssueItemViewModel> viewModel) {
-                mIssuesAdapter.replaceData(viewModel);
-                if (fragmentIssuesBinding.scrollChildSwipeRefreshLayout.isRefreshing()) {
-                    fragmentIssuesBinding.scrollChildSwipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
     }
 
     @Nullable
@@ -79,22 +64,40 @@ public class IssuesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         fragmentIssuesBinding.issuesRecyclerView.setLayoutManager(new IssuesRecyclerViewLayoutManager(getContext()));
         fragmentIssuesBinding.issuesRecyclerView.setAdapter(mIssuesAdapter);
-        fragmentIssuesBinding.scrollChildSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                issuesViewModel.refreshIssues();
-            }
-        });
-        issuesViewModel.fetchIssues();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void showProgress() {
+        if (!fragmentIssuesBinding.scrollChildSwipeRefreshLayout.isRefreshing()) {
+            fragmentIssuesBinding.scrollChildSwipeRefreshLayout.setRefreshing(true);
+        }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void hideProgress() {
+        if (fragmentIssuesBinding.scrollChildSwipeRefreshLayout.isRefreshing()) {
+            fragmentIssuesBinding.scrollChildSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void showError(String message) {
+        ToastMaker.makeShortToast(getActivity(), message);
+    }
+
+    @Override
+    public void onNewIssues(Collection<IssueItemViewModel> itemViewModelCollection) {
+        mIssuesAdapter.replaceData((List<IssueItemViewModel>) itemViewModelCollection);
+    }
+
+    @Override
+    public void bindPresenter(IssuesPresenter presenter) {
+        mIssuesAdapter = new IssuesAdapter(presenter);
+        fragmentIssuesBinding.issuesRecyclerView.setAdapter(mIssuesAdapter);
+    }
+
+    @Override
+    public void unbindPresenter() {
+
     }
 }

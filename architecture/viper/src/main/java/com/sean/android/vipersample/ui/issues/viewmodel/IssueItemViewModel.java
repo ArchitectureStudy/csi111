@@ -1,7 +1,5 @@
 package com.sean.android.vipersample.ui.issues.viewmodel;
 
-import android.view.View;
-
 /**
  * Created by Seonil on 2017-02-17.
  */
@@ -12,5 +10,8 @@ public interface IssueItemViewModel {
 
     String getIssueIdText();
 
-    void onItemClick(View view);
+    int getIssueNumber();
+
+    String getIssueContentsText();
+
 }

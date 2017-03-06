@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <data>
-
-        <variable
-            name="issueViewModel"
-            type="com.sean.android.vipersample.ui.issues.viewmodel.IssueViewModel" />
-    </data>
-
     <com.sean.android.vipersample.base.view.ScrollChildSwipeRefreshLayout
         android:id="@+id/scrollChildSwipeRefreshLayout"
         android:layout_width="match_parent"

@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import com.sean.android.vipersample.R;
 import com.sean.android.vipersample.base.util.ActivityUtils;
 import com.sean.android.vipersample.databinding.ActivityIssuesBinding;
+import com.sean.android.vipersample.ui.issues.presenter.IssuesPresenter;
+import com.sean.android.vipersample.ui.issues.presenter.IssuesPresenterBinder;
+import com.sean.android.vipersample.ui.issues.router.IssueRouter;
 
 
 /**
@@ -21,6 +24,12 @@ public class IssuesActivity extends AppCompatActivity {
 
     private ActivityIssuesBinding activityIssuesBinding;
 
+    private IssuesModule mIssuesModule;
+    private IssuesPresenter mIssuePresenter;
+    private IssueRouter mIssueRouter;
+
+    private IssuesPresenterBinder mIssuesPresenterBinder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +37,11 @@ public class IssuesActivity extends AppCompatActivity {
         setSupportActionBar(activityIssuesBinding.toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mIssuesModule = new IssuesModule(this);
+
+        mIssueRouter = mIssuesModule.getRouter();
+
+        mIssuePresenter = IssuesModule.createIssuePresenter(IssuesModule.createIssueInteractor());
 
         IssuesFragment issuesFragment = (IssuesFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
 
@@ -35,6 +49,22 @@ public class IssuesActivity extends AppCompatActivity {
             issuesFragment = IssuesFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), issuesFragment, R.id.contentFrame);
         }
+        mIssuesPresenterBinder = issuesFragment;
+
+        mIssuePresenter.attachView(issuesFragment);
+        mIssuePresenter.attachRouter(mIssueRouter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mIssuesPresenterBinder.bindPresenter(mIssuePresenter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mIssuesPresenterBinder.unbindPresenter();
     }
 
     @Override

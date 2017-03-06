@@ -11,10 +11,8 @@
 
 
     <LinearLayout
-        android:id="@+id/item_issue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{itemViewModel::onItemClick}"
         android:orientation="vertical"
         android:paddingBottom="5dp"
         android:paddingTop="5dp">
