@@ -9,15 +9,15 @@ import com.sean.android.vipersample.ui.issues.router.IssueRouterImpl;
  * Created by Seonil on 2017-03-06.
  */
 
-public final class IssuesModule {
+final class IssuesModule {
     private IssuesActivity issuesActivity;
 
 
-    public IssuesModule(IssuesActivity issuesActivity) {
+    IssuesModule(IssuesActivity issuesActivity) {
         this.issuesActivity = issuesActivity;
     }
 
-    public IssueRouter getRouter() {
+    IssueRouter getRouter() {
         return new IssueRouterImpl(issuesActivity);
     }
 

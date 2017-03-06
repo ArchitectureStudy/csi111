@@ -13,18 +13,21 @@ import com.sean.android.vipersample.R;
 import com.sean.android.vipersample.base.command.ToastNotifyCommand;
 import com.sean.android.vipersample.base.viewmodel.NotifyUpdateViewModelListener;
 import com.sean.android.vipersample.databinding.FragmentIssueDetailBinding;
+import com.sean.android.vipersample.ui.issuedetail.presenter.CommentsPresenter;
+import com.sean.android.vipersample.ui.issuedetail.presenter.CommentsPresenterBinder;
 import com.sean.android.vipersample.ui.issuedetail.viewmodel.CommentCommander;
 import com.sean.android.vipersample.ui.issuedetail.viewmodel.CommentItemViewModel;
 import com.sean.android.vipersample.ui.issuedetail.viewmodel.CommentsViewModel;
 import com.sean.android.vipersample.ui.issuedetail.viewmodel.CommentsViewModelImpl;
 import com.sean.android.vipersample.ui.issuedetail.viewmodel.IssueDetailViewModel;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by Seonil on 2017-01-20.
  */
-public class IssueDetailFragment extends Fragment {
+public class IssueDetailFragment extends Fragment implements IssueDetailViewCallbacks, CommentsPresenterBinder {
     private CommentsAdapter mCommentsAdapter;
 
     private FragmentIssueDetailBinding fragmentIssueDetailBinding;
@@ -33,6 +36,9 @@ public class IssueDetailFragment extends Fragment {
 
     private CommentsViewModel commentsViewModel;
 
+    private CommentsPresenter mCommentsPresenter;
+
+
     public static IssueDetailFragment newInstance() {
         return new IssueDetailFragment();
     }
@@ -40,7 +46,7 @@ public class IssueDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCommentsAdapter = new CommentsAdapter();
+
         issueDetailViewModel = getArguments().getParcelable(IssueDetailViewModel.class.getName());
         issueDetailViewModel.setNotifyCommand(new ToastNotifyCommand(getActivity()));
         initializeIssueViewModel();
@@ -51,7 +57,6 @@ public class IssueDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentIssueDetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_issue_detail, container, false);
         fragmentIssueDetailBinding.commentsRecyclerView.setLayoutManager(new CommentsRecyclerViewLayoutManager(getContext()));
-        fragmentIssueDetailBinding.commentsRecyclerView.setAdapter(mCommentsAdapter);
         return fragmentIssueDetailBinding.getRoot();
     }
 
@@ -88,5 +93,47 @@ public class IssueDetailFragment extends Fragment {
             issueDetailViewModel.setCommander((CommentCommander) commentsViewModel);
             commentsViewModel.fetchComments();
         }
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showError(String message) {
+
+    }
+
+    @Override
+    public void onNewComments(Collection<CommentItemViewModel> itemViewModelCollection) {
+
+    }
+
+    @Override
+    public void onNewIssueDetail(IssueDetailViewModel issueDetailViewModel) {
+        fragmentIssueDetailBinding.setIssueDetailViewModel(issueDetailViewModel);
+    }
+
+    @Override
+    public void bindPresenter(final CommentsPresenter presenter) {
+        mCommentsAdapter = new CommentsAdapter(presenter);
+        fragmentIssueDetailBinding.commentsRecyclerView.setAdapter(mCommentsAdapter);
+        fragmentIssueDetailBinding.sendCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.onClickedComment(fragmentIssueDetailBinding.writeCommentEditText.getText().toString());
+            }
+        });
+    }
+
+    @Override
+    public void unbindPresenter() {
+
     }
 }
