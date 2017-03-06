@@ -46,9 +46,33 @@ public class CommentsInteractor {
         });
     }
 
+    public void postComment(String comment, final ActionPost actionPost) {
+        CommentsRepository.getInstance().createComment(mIssueNumber, comment, new CommentsDataSource.PostCommentCallback() {
+            @Override
+            public void onCommentPosted(Comment comment) {
+                if (actionPost != null) {
+                    actionPost.onCompleted();
+                }
+            }
+
+            @Override
+            public void onCommentPostFailed(int code, String message) {
+                if (actionPost != null) {
+                    actionPost.onFailed(message);
+                }
+            }
+        });
+    }
+
 
     public interface Action {
         void onCompleted(List<CommentItemViewModel> itemViewModelList);
+
+        void onFailed(String message);
+    }
+
+    public interface ActionPost {
+        void onCompleted();
 
         void onFailed(String message);
     }

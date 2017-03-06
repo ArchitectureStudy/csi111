@@ -10,6 +10,7 @@ import com.sean.android.vipersample.databinding.LayoutCommentItemBinding;
 import com.sean.android.vipersample.ui.issuedetail.presenter.CommentsPresenter;
 import com.sean.android.vipersample.ui.issuedetail.viewmodel.CommentItemViewModel;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.sean.android.vipersample.R;
 import com.sean.android.vipersample.base.command.ToastNotifyCommand;
+import com.sean.android.vipersample.base.util.ToastMaker;
 import com.sean.android.vipersample.base.viewmodel.NotifyUpdateViewModelListener;
 import com.sean.android.vipersample.databinding.FragmentIssueDetailBinding;
 import com.sean.android.vipersample.ui.issuedetail.presenter.CommentsPresenter;
@@ -36,9 +37,6 @@ public class IssueDetailFragment extends Fragment implements IssueDetailViewCall
 
     private CommentsViewModel commentsViewModel;
 
-    private CommentsPresenter mCommentsPresenter;
-
-
     public static IssueDetailFragment newInstance() {
         return new IssueDetailFragment();
     }
@@ -49,7 +47,6 @@ public class IssueDetailFragment extends Fragment implements IssueDetailViewCall
 
         issueDetailViewModel = getArguments().getParcelable(IssueDetailViewModel.class.getName());
         issueDetailViewModel.setNotifyCommand(new ToastNotifyCommand(getActivity()));
-        initializeIssueViewModel();
     }
 
     @Nullable
@@ -107,12 +104,12 @@ public class IssueDetailFragment extends Fragment implements IssueDetailViewCall
 
     @Override
     public void showError(String message) {
-
+        ToastMaker.makeShortToast(getActivity(), message);
     }
 
     @Override
     public void onNewComments(Collection<CommentItemViewModel> itemViewModelCollection) {
-
+        mCommentsAdapter.replaceData((List<CommentItemViewModel>) itemViewModelCollection);
     }
 
     @Override

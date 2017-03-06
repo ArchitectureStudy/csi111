@@ -21,12 +21,12 @@ final class IssueDetailModule {
         return new CommentRouterImpl(mIssueDetailActivity);
     }
 
-    static CommentsInteractor createIssueInteractor() {
-        return new CommentsInteractor();
+    static CommentsInteractor createIssueInteractor(int issueNumber) {
+        return new CommentsInteractor(issueNumber);
     }
 
     static CommentsPresenter createIssuePresenter(CommentsInteractor commentsInteractor) {
-        return new CommentsPresenter();
+        return new CommentsPresenter(commentsInteractor);
     }
 
 }
