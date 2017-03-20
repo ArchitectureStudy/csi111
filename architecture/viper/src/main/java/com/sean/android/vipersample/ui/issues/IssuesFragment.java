@@ -92,7 +92,10 @@ public class IssuesFragment extends Fragment implements IssuesViewCallbacks, Iss
 
     @Override
     public void bindPresenter(IssuesPresenter presenter) {
-        mIssuesAdapter = new IssuesAdapter(presenter);
+        if (mIssuesAdapter == null) {
+            mIssuesAdapter = new IssuesAdapter(presenter);
+        }
+        
         fragmentIssuesBinding.issuesRecyclerView.setAdapter(mIssuesAdapter);
     }
 

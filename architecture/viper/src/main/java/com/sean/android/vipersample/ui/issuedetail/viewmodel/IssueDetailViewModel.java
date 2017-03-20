@@ -1,9 +1,7 @@
 package com.sean.android.vipersample.ui.issuedetail.viewmodel;
 
 import android.os.Parcelable;
-import android.view.View;
 
-import com.sean.android.vipersample.base.command.MessageNotifyCommand;
 import com.sean.android.vipersample.base.databinding.BindableString;
 
 /**
@@ -12,17 +10,9 @@ import com.sean.android.vipersample.base.databinding.BindableString;
 
 public interface IssueDetailViewModel extends Parcelable {
 
-    String getTitleText();
+    BindableString getTitleText();
 
-    String getContentsText();
+    BindableString getContentsText();
 
     BindableString getCommentText();
-
-    int getIssueNumber();
-
-    void onClickSendComment(View view);
-
-    void setCommander(CommentCommander commander);
-
-    void setNotifyCommand(MessageNotifyCommand messageNotifyCommand);
 }

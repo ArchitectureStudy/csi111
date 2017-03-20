@@ -10,9 +10,12 @@ import android.view.MenuItem;
 import com.sean.android.vipersample.R;
 import com.sean.android.vipersample.base.util.ActivityUtils;
 import com.sean.android.vipersample.base.util.BundleBuilder;
-import com.sean.android.vipersample.data.issue.Issue;
+import com.sean.android.vipersample.ui.issuedetail.interactor.CommentsInteractor;
+import com.sean.android.vipersample.ui.issuedetail.presenter.CommentsPresenterBinder;
+import com.sean.android.vipersample.ui.issuedetail.presenter.IssueDetailPresenter;
+import com.sean.android.vipersample.ui.issuedetail.router.CommentRouter;
 import com.sean.android.vipersample.ui.issuedetail.viewmodel.IssueDetailViewModel;
-import com.sean.android.vipersample.ui.issuedetail.viewmodel.IssueDetailViewModelImpl;
+import com.sean.android.vipersample.ui.issues.IssuesFragment;
 
 /**
  * Created by sean on 2017. 1. 18..
@@ -23,20 +26,55 @@ public class IssueDetailActivity extends AppCompatActivity {
     public static final String EXTRA_ISSUE_TITLE = "ISSUE_TITLE";
     public static final String EXTRA_ISSUE_BODY = "ISSUE_BODY";
 
-    private IssueDetailViewModel issueDetailViewModel;
+    private IssueDetailModule mIssueDetailModule;
+
+    private IssueDetailPresenter mIssueDetailPresenter;
+
+    private CommentsPresenterBinder mCommentsPresenterBinder;
+
+    private CommentsInteractor mCommentsInteractor;
+
+    private CommentRouter mCommentRouter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issuedetail);
 
+        mIssueDetailModule = new IssueDetailModule(this);
+
+        mCommentRouter = mIssueDetailModule.getRouter();
+
         getIssueDataFromIntent(getIntent());
+        mIssueDetailPresenter = IssueDetailModule.createIssuePresenter(mCommentsInteractor);
 
         IssueDetailFragment issueDetailFragment = (IssueDetailFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
 
         if (issueDetailFragment == null) {
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), createIssueDetailFragment(IssueDetailFragment.class), R.id.contentFrame);
+            issueDetailFragment = IssueDetailFragment.newInstance();
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), issueDetailFragment, R.id.contentFrame);
         }
+
+        mCommentsPresenterBinder = issueDetailFragment;
+
+
+
+
+        mIssueDetailPresenter.attachRouter(mCommentRouter);
+        mIssueDetailPresenter.attachView(issueDetailFragment);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCommentsPresenterBinder.bindPresenter(mIssueDetailPresenter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mCommentsPresenterBinder.unbindPresenter();
     }
 
     @Override
@@ -51,18 +89,12 @@ public class IssueDetailActivity extends AppCompatActivity {
 
     private void getIssueDataFromIntent(Intent intent) {
         if (intent != null) {
-            Issue issue = new Issue();
-            issue.setNumber(getIntent().getIntExtra(EXTRA_ISSUE_NUMBER, -1));
-            issue.setTitle(getIntent().getStringExtra(EXTRA_ISSUE_TITLE));
-            issue.setBody(getIntent().getStringExtra(EXTRA_ISSUE_BODY));
-
-            issueDetailViewModel = new IssueDetailViewModelImpl(issue);
+            int number = getIntent().getIntExtra(EXTRA_ISSUE_NUMBER, -1);
+            String title = getIntent().getStringExtra(EXTRA_ISSUE_TITLE);
+            String body = getIntent().getStringExtra(EXTRA_ISSUE_BODY);
+            mCommentsInteractor = IssueDetailModule.createIssueInteractor(number);
+            mCommentsInteractor.setIssueBody(body);
+            mCommentsInteractor.setIssueTitle(title);
         }
-    }
-
-    private Fragment createIssueDetailFragment(Class<?> fragmentClass) {
-        BundleBuilder bundleBuilder = new BundleBuilder();
-        bundleBuilder.with(IssueDetailViewModel.class.getName(), issueDetailViewModel);
-        return Fragment.instantiate(this, fragmentClass.getName(), bundleBuilder.build());
     }
 }

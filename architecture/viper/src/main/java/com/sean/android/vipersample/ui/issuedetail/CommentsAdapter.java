@@ -7,10 +7,9 @@ import android.view.ViewGroup;
 
 import com.sean.android.vipersample.R;
 import com.sean.android.vipersample.databinding.LayoutCommentItemBinding;
-import com.sean.android.vipersample.ui.issuedetail.presenter.CommentsPresenter;
+import com.sean.android.vipersample.ui.issuedetail.presenter.IssueDetailPresenter;
 import com.sean.android.vipersample.ui.issuedetail.viewmodel.CommentItemViewModel;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,10 +23,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
     private List<CommentItemViewModel> mCommentViewModels;
 
-    private CommentsPresenter mCommentsPresenter;
+    private IssueDetailPresenter mCommentsPresenter;
 
 
-    public CommentsAdapter(CommentsPresenter commentsPresenter) {
+    public CommentsAdapter(IssueDetailPresenter commentsPresenter) {
         setList(Collections.<CommentItemViewModel>emptyList());
         this.mCommentsPresenter = commentsPresenter;
     }

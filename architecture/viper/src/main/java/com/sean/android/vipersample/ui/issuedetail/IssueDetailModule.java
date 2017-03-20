@@ -1,7 +1,7 @@
 package com.sean.android.vipersample.ui.issuedetail;
 
 import com.sean.android.vipersample.ui.issuedetail.interactor.CommentsInteractor;
-import com.sean.android.vipersample.ui.issuedetail.presenter.CommentsPresenter;
+import com.sean.android.vipersample.ui.issuedetail.presenter.IssueDetailPresenter;
 import com.sean.android.vipersample.ui.issuedetail.router.CommentRouter;
 import com.sean.android.vipersample.ui.issuedetail.router.CommentRouterImpl;
 
@@ -25,8 +25,8 @@ final class IssueDetailModule {
         return new CommentsInteractor(issueNumber);
     }
 
-    static CommentsPresenter createIssuePresenter(CommentsInteractor commentsInteractor) {
-        return new CommentsPresenter(commentsInteractor);
+    static IssueDetailPresenter createIssuePresenter(CommentsInteractor commentsInteractor) {
+        return new IssueDetailPresenter(commentsInteractor);
     }
 
 }

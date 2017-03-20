@@ -1,13 +1,6 @@
 package com.sean.android.vipersample.ui.issuedetail.viewmodel;
 
-import android.view.View;
-
-import com.sean.android.vipersample.base.command.MessageNotifyCommand;
 import com.sean.android.vipersample.base.databinding.BindableString;
-import com.sean.android.vipersample.data.comment.Comment;
-import com.sean.android.vipersample.data.comment.CommentsDataSource;
-import com.sean.android.vipersample.data.comment.CommentsRepository;
-import com.sean.android.vipersample.data.issue.Issue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,30 +11,31 @@ import java.util.List;
 
 public class IssueDetailViewModelImpl implements IssueDetailViewModel {
 
-    private int mIssueNumber;
-    private String mTitleText = "";
-    private String mContentsText = "";
+    private BindableString mTitleText = new BindableString();
+    private BindableString mContentsText = new BindableString();
     private BindableString mCommentsText = new BindableString();
 
     private List<CommentCommander> mCommanders = new ArrayList<>();
 
-    private MessageNotifyCommand mNotifyCommand;
-
     public IssueDetailViewModelImpl() {
+        this("", "", "");
     }
 
-    public IssueDetailViewModelImpl(Issue issue) {
-        if (issue != null) {
-            mTitleText = issue.getTitle();
-            mContentsText = issue.getBody();
-            mIssueNumber = issue.getNumber();
-        }
+    public IssueDetailViewModelImpl(String titleText, String contentsText) {
+        this(titleText, contentsText, "");
+    }
+
+    public IssueDetailViewModelImpl(String titleText, String contentsText, String commentsText) {
+        this.mTitleText.set(titleText);
+        this.mContentsText.set(contentsText);
+        this.mCommentsText.set(commentsText);
     }
 
     protected IssueDetailViewModelImpl(android.os.Parcel in) {
-        mIssueNumber = in.readInt();
-        mTitleText = in.readString();
-        mContentsText = in.readString();
+        mTitleText = new BindableString();
+        mTitleText.set(in.readString());
+        mContentsText = new BindableString();
+        mContentsText.set(in.readString());
         mCommentsText = new BindableString();
         mCommentsText.set(in.readString());
 
@@ -60,12 +54,12 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
     };
 
     @Override
-    public String getTitleText() {
+    public BindableString getTitleText() {
         return mTitleText;
     }
 
     @Override
-    public String getContentsText() {
+    public BindableString getContentsText() {
         return mContentsText;
     }
 
@@ -75,37 +69,14 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
     }
 
     @Override
-    public int getIssueNumber() {
-        return mIssueNumber;
-    }
-
-    @Override
-    public void onClickSendComment(View view) {
-        CommentsRepository.getInstance().createComment(mIssueNumber, mCommentsText.get(), new CommentsDataSource.PostCommentCallback() {
-            @Override
-            public void onCommentPosted(Comment comment) {
-                commandRefreshAll();
-            }
-
-            @Override
-            public void onCommentPostFailed(int code, String message) {
-                if (mNotifyCommand != null) {
-                    mNotifyCommand.execute(message);
-                }
-            }
-        });
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
     public void writeToParcel(android.os.Parcel parcel, int i) {
-        parcel.writeInt(mIssueNumber);
-        parcel.writeString(mTitleText);
-        parcel.writeString(mContentsText);
+        parcel.writeString(mTitleText.get());
+        parcel.writeString(mContentsText.get());
         parcel.writeString(mCommentsText.get());
     }
 
@@ -115,15 +86,5 @@ public class IssueDetailViewModelImpl implements IssueDetailViewModel {
                 commander.refresh();
             }
         }
-    }
-
-    @Override
-    public void setCommander(CommentCommander commander) {
-        this.mCommanders.add(commander);
-    }
-
-    @Override
-    public void setNotifyCommand(MessageNotifyCommand messageNotifyCommand) {
-        mNotifyCommand = messageNotifyCommand;
     }
 }

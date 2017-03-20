@@ -6,6 +6,8 @@ import com.sean.android.vipersample.data.comment.CommentsDataSource;
 import com.sean.android.vipersample.data.comment.CommentsRepository;
 import com.sean.android.vipersample.ui.issuedetail.viewmodel.CommentItemViewModel;
 import com.sean.android.vipersample.ui.issuedetail.viewmodel.CommentItemViewModelImpl;
+import com.sean.android.vipersample.ui.issuedetail.viewmodel.IssueDetailViewModel;
+import com.sean.android.vipersample.ui.issuedetail.viewmodel.IssueDetailViewModelImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +18,21 @@ import java.util.List;
 
 public class CommentsInteractor {
 
-    private int mIssueNumber;
+    private final int mIssueNumber;
+
+    private String mIssueTitle;
+
+    private String mIssueBody;
+
+    private IssueDetailViewModel mIssueDetailViewModel;
 
     public CommentsInteractor(int issueNumber) {
         this.mIssueNumber = issueNumber;
+        this.mIssueDetailViewModel = new IssueDetailViewModelImpl();
+    }
+
+    public IssueDetailViewModel getIssueDetailViewModel() {
+        return mIssueDetailViewModel;
     }
 
     public void execute(final Action action) {
@@ -64,6 +77,15 @@ public class CommentsInteractor {
         });
     }
 
+    public void setIssueTitle(String mIssueTitle) {
+        this.mIssueTitle = mIssueTitle;
+        mIssueDetailViewModel.getTitleText().set(mIssueTitle);
+    }
+
+    public void setIssueBody(String mIssueBody) {
+        this.mIssueBody = mIssueBody;
+        mIssueDetailViewModel.getContentsText().set(mIssueBody);
+    }
 
     public interface Action {
         void onCompleted(List<CommentItemViewModel> itemViewModelList);

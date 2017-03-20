@@ -16,6 +16,12 @@ import java.util.List;
 
 public class IssuesInteractor {
 
+    private List<IssueItemViewModel> mCachedData;
+
+    public IssuesInteractor() {
+        mCachedData = new ArrayList<>();
+    }
+
     public void execute(final Action action) {
         IssuesRepository.getInstance().fetchIssues(new IssuesDataSource.LoadIssuesCallback() {
             @Override
@@ -27,6 +33,9 @@ public class IssuesInteractor {
                 if (action != null) {
                     action.onCompleted(itemVMList);
                 }
+
+                mCachedData.clear();
+                mCachedData.addAll(itemVMList);
             }
 
             @Override
@@ -38,6 +47,9 @@ public class IssuesInteractor {
         });
     }
 
+    public List<IssueItemViewModel> getIssueItemViewModels() {
+        return mCachedData;
+    }
 
     public interface Action {
         void onCompleted(List<IssueItemViewModel> itemViewModelList);

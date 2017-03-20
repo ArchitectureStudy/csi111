@@ -19,5 +19,7 @@ public interface IssueDetailViewCallbacks {
 
     void onNewComments(Collection<CommentItemViewModel> itemViewModelCollection);
 
+    void refreshComments();
+
     void onNewIssueDetail(IssueDetailViewModel issueDetailViewModel);
 }
