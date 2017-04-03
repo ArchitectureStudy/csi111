@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.sean.android.mvvmsample"
-        minSdkVersion 15
+        minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -32,6 +32,8 @@ dependencies {
     androidTestCompile(testingDependencies.espresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     compile supportDependencies.appCompat
     compile supportDependencies.cardView
     compile supportDependencies.recyclerView
